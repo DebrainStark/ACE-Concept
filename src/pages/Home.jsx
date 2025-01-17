@@ -4,6 +4,10 @@ import Hero from "../components/Hero";
 import projectsData from "../data/projectData";
 import Projects from "../components/projects";
 import Contacts from "../components/Contacts";
+import AboutUs from "../components/About";
+import OurTeam from "../components/OurTeam";
+import ClientSection from "../components/Clients";
+import Portfolio from "../components/Portfolio";
 
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,17 +23,18 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* Navigation */}
       <Navigation />
       <div className="min-h-screen bg-black">
-        {/* Hero Section */}
         <Hero />
+        <AboutUs />
+        <OurTeam />
 
-        {/* Featured Projects Section */}
         <Projects projects={projectsData} />
 
+        <ClientSection />
         {/* Quick Contact Section */}
         <Contacts />
+        <Portfolio />
       </div>
     </div>
   );

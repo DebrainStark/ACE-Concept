@@ -36,9 +36,11 @@ const Hero = () => {
             animationDelay: "0.5s",
           }}
         >
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black leading-tight">
+          <h1 className="text-3xl sm:text-6xl md:text-4xl lg:text-7xl font-black leading-tight">
             <span className="block text-white">Crafting Extraordinary</span>
-            <span className="block text-blue-500 mt-1 sm:mt-2">Event Experiences</span>
+            <span className="block text-blue-500 mt-1 sm:mt-2">
+              Event Experiences
+            </span>
           </h1>
           <p className="mt-4 sm:mt-6 max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-gray-200 leading-relaxed Playfair-Display tracking-wide px-2 sm:px-4">
             Professional Stage Fabrication, Red Carpet Events, and Custom

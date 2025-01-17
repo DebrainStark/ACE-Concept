@@ -9,6 +9,7 @@ const Contact = () => {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 items-center">
+          {/* Left Section */}
           <div>
             <h2 className="text-4xl font-bold text-white">
               Ready to Create{" "}
@@ -18,22 +19,28 @@ const Contact = () => {
               Let's discuss your next event and bring your vision to life.
             </p>
           </div>
+
+          {/* Right Section */}
           <div className="space-y-6 md:text-right">
-            <a
-              href="tel:+1234567890"
-              className="block md:inline-flex items-center text-white hover:text-blue-300 transition-colors duration-300"
-            >
-              <Phone className="mr-2" size={20} />
-              (123) 456-7890
-            </a>
-            <br />
-            <a
-              href="mailto:contact@aceconcept.com"
-              className="block md:inline-flex items-center text-white hover:text-blue-300 transition-colors duration-300"
-            >
-              <Mail className="mr-2" size={20} />
-              contact@aceconcept.com
-            </a>
+            <div className="flex flex-col md:flex-row md:justify-end md:space-x-8">
+              {/* Phone */}
+              <a
+                href="tel:+1234567890"
+                className="flex items-center text-white hover:text-blue-300 transition-colors duration-300 mb-4 md:mb-0"
+              >
+                <Phone className="mr-2" size={20} />
+                (123) 456-7890
+              </a>
+
+              {/* Email */}
+              <a
+                href="mailto:contact@aceconcept.com"
+                className="flex items-center text-white hover:text-blue-300 transition-colors duration-300"
+              >
+                <Mail className="mr-2" size={20} />
+                contact@aceconcept.com
+              </a>
+            </div>
           </div>
         </div>
       </div>

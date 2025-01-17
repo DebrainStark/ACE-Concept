@@ -55,9 +55,9 @@ const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-black"
+              className="text-black p-3 bg-gray-200 rounded-full hover:bg-gray-300 transition-all duration-300"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
         </div>
@@ -65,17 +65,22 @@ const Navigation = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden absolute w-full bg-white shadow-md">
+        <div className="md:hidden bg-white shadow-md">
           <div className="px-4 pt-4 pb-6 space-y-4">
-            {["Services", "Portfolio", "About", "Contact"].map((item) => (
+            {["Services", "Portfolio", "About"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
                 className="block text-black font-medium hover:text-blue-600 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)} // Close menu on click
               >
                 {item}
               </a>
             ))}
+            {/* Contact Us Button */}
+            <button className="w-full bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+              Contact Us
+            </button>
           </div>
         </div>
       )}

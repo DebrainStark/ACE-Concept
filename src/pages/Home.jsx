@@ -8,6 +8,7 @@ import AboutUs from "../components/About";
 import OurTeam from "../components/OurTeam";
 import ClientSection from "../components/Clients";
 import Portfolio from "../components/Portfolio";
+import Partners from "../components/Partners";
 
 const HomePage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,8 +33,9 @@ const HomePage = () => {
         <Projects projects={projectsData} />
 
         <ClientSection />
-        {/* Quick Contact Section */}
+        <Partners />
         <Contacts />
+
         <Portfolio />
       </div>
     </div>

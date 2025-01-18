@@ -18,42 +18,55 @@ const Portfolio = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold">
+          <h2 className="text-5xl font-extrabold tracking-tight">
             Our <span className="text-blue-500">Portfolio</span>
           </h2>
           <p className="mt-4 text-lg text-gray-400">
-            A glimpse into our world of creativity and innovation.
+            Discover the projects that showcase our creativity and expertise.
           </p>
         </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Masonry Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {portfolioItems.map((item) => (
             <div
               key={item.id}
-              className="relative group cursor-pointer rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300"
+              className="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer"
               onClick={() => setSelectedItem(item)}
             >
               {/* Image */}
               <img
                 src={item.image}
                 alt={item.title}
-                className="w-full h-64 object-cover"
+                className="w-full h-64 object-cover transform group-hover:scale-110 transition-transform duration-300"
               />
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <h3 className="text-lg font-semibold text-white">
+                  {item.title}
+                </h3>
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Modal */}
+        {/* Full-Screen Modal */}
         {selectedItem && (
-          <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-50">
-            <div className="bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden max-w-lg w-full">
+          <div
+            className="fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+            onClick={() => setSelectedItem(null)}
+          >
+            <div
+              className="relative bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden max-w-3xl w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
               {/* Modal Header */}
               <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                <h3 className="text-xl font-semibold">{selectedItem.title}</h3>
+                <h3 className="text-2xl font-semibold">{selectedItem.title}</h3>
                 <button
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white text-2xl"
                   onClick={() => setSelectedItem(null)}
+                  aria-label="Close"
                 >
                   ✕
                 </button>
@@ -64,12 +77,12 @@ const Portfolio = () => {
                 <img
                   src={selectedItem.image}
                   alt={selectedItem.title}
-                  className="w-full h-64 object-cover rounded-lg mb-4"
+                  className="w-full h-80 object-cover rounded-lg mb-4"
                 />
-                <p className="text-gray-300">
-                  Explore the intricate details of our work, crafted to leave
-                  lasting impressions. This is a showcase of our expertise in{" "}
-                  {selectedItem.title.toLowerCase()}.
+                <p className="text-gray-300 text-lg">
+                  Dive into the details of our work in{" "}
+                  {selectedItem.title.toLowerCase()}. This project exemplifies
+                  our dedication to creativity and excellence.
                 </p>
               </div>
             </div>

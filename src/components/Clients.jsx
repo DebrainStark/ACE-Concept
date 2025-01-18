@@ -1,5 +1,5 @@
 import React from "react";
-import client1 from "../assets/team.jpeg";
+import { User } from "lucide-react";
 
 const testimonials = [
   {
@@ -8,7 +8,7 @@ const testimonials = [
     position: "Marketing Director, ABC Corp",
     feedback:
       "Working with this team was a fantastic experience. They exceeded our expectations at every turn.",
-    image: client1,
+    bgColor: "bg-blue-500",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const testimonials = [
     position: "CEO, Eventify",
     feedback:
       "Their creativity and professionalism are unmatched. We can't wait to collaborate again!",
-    image: client1,
+    bgColor: "bg-purple-500",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const testimonials = [
     position: "Operations Manager, Dream Events",
     feedback:
       "From start to finish, the process was seamless. They truly brought our vision to life.",
-    image: client1,
+    bgColor: "bg-green-500",
   },
   {
     id: 4,
@@ -32,9 +32,25 @@ const testimonials = [
     position: "Founder, Luxe Gatherings",
     feedback:
       "A highly skilled team that goes above and beyond to deliver exceptional results.",
-    image: client1,
+    bgColor: "bg-pink-500",
   },
 ];
+
+const Avatar = ({ name, bgColor }) => {
+  const initials = name
+    .split(" ")
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+
+  return (
+    <div
+      className={`relative w-16 h-16 rounded-full flex items-center justify-center text-white ${bgColor} group-hover:ring-4 ring-offset-2 ring-offset-gray-800 ring-white/20 transition-all`}
+    >
+      {initials}
+    </div>
+  );
+};
 
 const ClientSection = () => {
   return (
@@ -50,34 +66,34 @@ const ClientSection = () => {
           </p>
         </div>
 
-        {/* Testimonials Grid */}
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="group bg-gray-800 rounded-lg shadow-lg p-6 text-center transition-transform transform hover:scale-105"
+              className="group bg-gray-800 rounded-lg shadow-lg p-6 text-center transition-all hover:scale-105 hover:bg-gray-700/50"
             >
-              {/* Client Logo or Avatar */}
-              <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-16 h-16 mx-auto rounded-full object-contain mb-4"
-              />
-              {/* Client Feedback */}
-              <p className="text-gray-300 italic">"{testimonial.feedback}"</p>
+              <div className="mb-6 flex justify-center">
+                <Avatar name={testimonial.name} bgColor={testimonial.bgColor} />
+              </div>
+
+              <p className="text-gray-300 italic mb-4">
+                "{testimonial.feedback}"
+              </p>
+
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-semibold text-white">
                   {testimonial.name}
                 </h3>
-                <p className="text-blue-400 text-sm">{testimonial.position}</p>
+                <p className="text-blue-400 text-sm mt-1">
+                  {testimonial.position}
+                </p>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA */}
         <div className="text-center mt-12">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition-transform transform hover:scale-105">
+          <button className="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition-all hover:scale-105 font-medium">
             Join Our Esteemed Clients
           </button>
         </div>

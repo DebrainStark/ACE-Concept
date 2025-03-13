@@ -3,11 +3,9 @@ import Navigation from "../components/Navigation";
 import Hero from "../components/Hero";
 import projectsData from "../data/projectData";
 import Projects from "../components/projects";
-import Contacts from "../components/Contacts";
 import AboutUs from "../components/About";
 import OurTeam from "../components/OurTeam";
 import ClientSection from "../components/Clients";
-import Portfolio from "../components/Portfolio";
 import Partners from "../components/Partners";
 
 const HomePage = () => {
@@ -29,14 +27,9 @@ const HomePage = () => {
         <Hero />
         <AboutUs />
         <OurTeam />
-
         <Projects projects={projectsData} />
-
         <ClientSection />
         <Partners />
-        <Contacts />
-
-        <Portfolio />
       </div>
     </div>
   );

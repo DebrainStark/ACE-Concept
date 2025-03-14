@@ -251,7 +251,7 @@ const Portfolio = () => {
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-gray-900 py-16">
       {/* Clean, professional header */}
       <div className="relative bg-blue-900 py-16 md:py-20 lg:py-28">
         <div className="absolute inset-0 opacity-20">

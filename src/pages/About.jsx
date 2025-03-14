@@ -191,7 +191,7 @@ const AboutUs = () => {
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
   return (
-    <div className="bg-white text-gray-900">
+    <div className="bg-white text-gray-900 py-16">
       {/* Hero Section - Simplified for mobile */}
       <section 
         id="hero" 

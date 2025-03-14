@@ -1,13 +1,37 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ChevronRight, ArrowRight } from "react-feather";
 import projectsData from "../data/projectData"; // Make sure this import is correct
 
 const Projects = ({ projects = projectsData }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
   const containerRef = useRef(null);
 
-  // Handle mouse move for subtle parallax effect
+  // Window resize handler
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    handleResize(); // Set initial width
+    
+    let timeoutId = null;
+    const debouncedResize = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleResize, 100);
+    };
+    
+    window.addEventListener('resize', debouncedResize);
+    return () => {
+      window.removeEventListener('resize', debouncedResize);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
+
+  // Handle mouse move for subtle parallax effect - only on desktop
   const handleMouseMove = (e) => {
+    if (windowWidth < 1024) return; // Skip on mobile/tablet
+    
     if (containerRef.current) {
       const { left, top, width, height } = containerRef.current.getBoundingClientRect();
       const x = (e.clientX - left) / width;
@@ -18,6 +42,8 @@ const Projects = ({ projects = projectsData }) => {
 
   // Calculate parallax movement
   const getParallaxStyle = (depth = 1) => {
+    if (windowWidth < 1024) return {}; // Disable parallax on mobile/tablet
+    
     const xMovement = (mousePosition.x - 0.5) * depth * 20;
     const yMovement = (mousePosition.y - 0.5) * depth * 20;
     return {
@@ -29,7 +55,7 @@ const Projects = ({ projects = projectsData }) => {
     <section 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="py-24 relative bg-gradient-to-b from-white via-blue-50 to-white overflow-hidden"
+      className="py-12 sm:py-16 md:py-20 lg:py-24 relative bg-gradient-to-b from-white via-blue-50 to-white overflow-hidden"
     >
       {/* Subtle background pattern - laser-cut inspired */}
       <div className="absolute inset-0 opacity-5">
@@ -40,36 +66,36 @@ const Projects = ({ projects = projectsData }) => {
       </div>
 
       {/* Decorative elements */}
-      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-blue-100/50 blur-3xl"></div>
-      <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] rounded-full bg-blue-200/50 blur-3xl"></div>
+      <div className="absolute -top-32 -right-32 sm:-top-40 sm:-right-40 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] rounded-full bg-blue-100/50 blur-3xl"></div>
+      <div className="absolute -bottom-32 -left-32 sm:-bottom-40 sm:-left-40 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] rounded-full bg-blue-200/50 blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section header */}
-        <div className="text-center mb-16" style={getParallaxStyle(0.1)}>
-          <span className="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-medium tracking-wider uppercase mb-4 border border-blue-200">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16" style={getParallaxStyle(0.1)}>
+          <span className="inline-block px-3 py-1 sm:px-4 sm:py-1 rounded-full bg-blue-100 text-blue-700 text-xs sm:text-sm font-medium tracking-wider uppercase mb-3 sm:mb-4 border border-blue-200">
             OUR WORK
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900">
             Featured <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">Projects</span>
           </h2>
-          <div className="mt-4 w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
-          <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="mt-3 sm:mt-4 w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             Discover our latest red carpet experiences, custom fabrications, and LED installations
           </p>
         </div>
 
-        {/* Projects grid */}
-        <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Projects grid - responsive with fewer columns on mobile */}
+        <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, index) => (
             <div
               key={project.id}
               style={getParallaxStyle(0.2 + index * 0.05)}
-              className="group relative overflow-hidden rounded-xl shadow-lg bg-white transform hover:scale-102 transition-all duration-300 border border-gray-100 hover:border-blue-200 hover:shadow-xl"
+              className="group relative overflow-hidden rounded-lg sm:rounded-xl shadow-md hover:shadow-lg bg-white transform hover:scale-[1.02] transition-all duration-300 border border-gray-100 hover:border-blue-200"
             >
-              {/* Project image */}
-              <div className="aspect-w-16 aspect-h-9">
+              {/* Project image - responsive height */}
+              <div className="aspect-w-16 aspect-h-9 overflow-hidden">
                 <div
-                  className="w-full h-64 bg-cover bg-center transform group-hover:scale-105 transition-all duration-700"
+                  className="w-full h-48 sm:h-56 md:h-64 bg-cover bg-center transform group-hover:scale-105 transition-all duration-700"
                   style={{ backgroundImage: `url(${project.image})` }}
                 ></div>
                 
@@ -78,29 +104,29 @@ const Projects = ({ projects = projectsData }) => {
               </div>
               
               {/* Content - light theme version */}
-              <div className="p-6 relative">
+              <div className="p-4 sm:p-6 relative">
                 {/* Category badge */}
-                <div className="inline-flex px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-3 border border-blue-100">
+                <div className="inline-flex px-2 py-1 sm:px-3 rounded-full bg-blue-50 text-blue-700 text-xs font-medium mb-2 sm:mb-3 border border-blue-100">
                   {project.category}
                 </div>
                 
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                   {project.title}
                 </h3>
                 
-                <p className="mt-2 text-gray-600 line-clamp-2">
+                <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600 line-clamp-2">
                   {project.description || "Custom fabrication and innovative design solutions for a memorable event experience."}
                 </p>
                 
-                <div className="mt-4 flex justify-between items-center">
-                  <button className="flex items-center text-blue-600 hover:text-blue-800 transition-colors group-hover:font-medium">
+                <div className="mt-3 sm:mt-4 flex justify-between items-center">
+                  <button className="flex items-center text-sm sm:text-base text-blue-600 hover:text-blue-800 transition-colors group-hover:font-medium">
                     View Project 
-                    <ChevronRight className="ml-1 group-hover:ml-2 transition-all" size={16} />
+                    <ChevronRight className="ml-1 group-hover:ml-2 transition-all" size={windowWidth < 640 ? 14 : 16} />
                   </button>
                   
                   {/* Arrow icon that appears on hover */}
-                  <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 group-hover:translate-x-0">
-                    <ArrowRight size={16} />
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform translate-x-4 group-hover:translate-x-0">
+                    <ArrowRight size={windowWidth < 640 ? 14 : 16} />
                   </div>
                 </div>
               </div>
@@ -109,10 +135,10 @@ const Projects = ({ projects = projectsData }) => {
         </div>
         
         {/* View all projects button */}
-        <div className="mt-16 text-center">
-          <button className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full text-sm font-medium transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+        <div className="mt-10 sm:mt-12 lg:mt-16 text-center">
+          <button className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-blue-600 text-white rounded-full text-xs sm:text-sm font-medium transform hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
             Explore All Projects
-            <ChevronRight size={16} />
+            <ChevronRight size={windowWidth < 640 ? 14 : 16} />
           </button>
         </div>
       </div>

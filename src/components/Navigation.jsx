@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, ChevronDown, Phone } from "react-feather";
-import AceLogo from "../assets/ACE-LOGO2.png";
+import { ChevronDown, Phone } from "react-feather";
+import AceLogo from "../assets/ACE-LOGO4.png";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,9 +50,6 @@ const Navigation = () => {
         scrolled ? "shadow-xl bg-white" : "bg-white/95 backdrop-blur-sm"
       }`}
     >
-      {/* Top bar with contact info - visible only on desktop */}
-     
-
       {/* Main navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
@@ -123,7 +120,6 @@ const Navigation = () => {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </a>
             
-            
             {/* CTA Button */}
             <a 
               href="/contact" 
@@ -133,14 +129,31 @@ const Navigation = () => {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Modern Fries Menu Button */}
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-all duration-200 focus:outline-none"
+              className="relative w-14 h-14 flex flex-col justify-center items-center group focus:outline-none"
               aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              <div className="relative flex flex-col space-y-2 w-10">
+                {/* Three fries lines with transitions - bigger size */}
+                <span 
+                  className={`block h-1 bg-gray-700 transition-all duration-300 ease-out ${
+                    isMenuOpen ? 'w-10 translate-y-3 rotate-45' : 'w-10'
+                  }`}
+                ></span>
+                <span 
+                  className={`block h-1 bg-gray-700 transition-all duration-300 ease-out ${
+                    isMenuOpen ? 'w-10 opacity-0' : 'w-7 ml-3'
+                  }`}
+                ></span>
+                <span 
+                  className={`block h-1 bg-gray-700 transition-all duration-300 ease-out ${
+                    isMenuOpen ? 'w-10 -translate-y-3 -rotate-45' : 'w-8 ml-2'
+                  }`}
+                ></span>
+              </div>
             </button>
           </div>
         </div>
@@ -209,7 +222,6 @@ const Navigation = () => {
           >
             About
           </a>
-          
           
           {/* Mobile Contact Info */}
           <div className="pt-4 mt-4 border-t border-gray-100">

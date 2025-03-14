@@ -8,16 +8,7 @@ import Footer from "./components/Footer";
 // Pages
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
-//import ServicesPage from "./pages/Services";
 import PortfolioPage from "./pages/Portfolio";
-///import TestimonialsPage from "./pages/Testimonials";
-//import ContactPage from "./pages/Contact";
-
-// Service-specific pages
-//import RedCarpetPage from "./pages/services/RedCarpet";
-//import FabricationPage from "./pages/services/Fabrication";
-///import LedInstallationsPage from "./pages/services/LedInstallations";
-//import SignagePage from "./pages/services/Signage";
 
 function App() {
   return (
@@ -27,11 +18,10 @@ function App() {
         <main className="flex-grow">
           <Routes>
             {/* Main pages */}
-            <Route path="/" element={<HomePage />} />
+            <Route exact path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
            
-            
             {/* 404 page - this should always be last */}
             <Route path="*" element={
               <div className="flex items-center justify-center h-screen bg-gray-50">

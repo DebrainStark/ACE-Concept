@@ -278,10 +278,10 @@ const Portfolio = () => {
         
         <div className="relative container mx-auto px-4 md:px-6 z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-3 md:mb-4 text-white">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-white">
               Our Portfolio
             </h1>
-            <p className="text-base md:text-lg lg:text-xl text-blue-100 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto">
               {isMobile ? "Showcasing our innovative branded experiences" : "Showcasing innovative branded experiences that elevate our clients' presence"}
             </p>
           </div>
@@ -300,28 +300,28 @@ const Portfolio = () => {
         <div className="container mx-auto px-4 md:px-6">
           {isMobile ? (
             <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-xl font-semibold text-gray-900">
                 {filters.find(f => f.id === activeFilter)?.name || 'All Projects'}
               </h2>
               <button 
                 onClick={() => setIsFilterOpen(true)}
-                className="flex items-center px-4 py-2 rounded-md bg-gray-100 text-gray-800 text-sm font-medium"
+                className="flex items-center px-4 py-2 rounded-md bg-gray-100 text-gray-800 text-base font-medium"
               >
-                <Filter size={16} className="mr-2" />
+                <Filter size={18} className="mr-2" />
                 Filter
               </button>
               
               {/* Mobile filter drawer */}
               <div className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                <div className={`absolute right-0 top-0 bottom-0 w-64 bg-white shadow-lg transform transition-transform duration-300 ${isFilterOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className={`absolute right-0 top-0 bottom-0 w-72 bg-white shadow-lg transform transition-transform duration-300 ${isFilterOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                   <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
-                      <h3 className="font-semibold text-gray-900">Filter Projects</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">Filter Projects</h3>
                       <button 
                         onClick={() => setIsFilterOpen(false)}
                         className="p-1 rounded-full hover:bg-gray-100"
                       >
-                        <X size={20} />
+                        <X size={22} />
                       </button>
                     </div>
                   </div>
@@ -331,7 +331,7 @@ const Portfolio = () => {
                         <button
                           key={filter.id}
                           onClick={() => handleFilterChange(filter.id)}
-                          className={`px-4 py-3 rounded-md text-sm font-medium transition-all text-left ${
+                          className={`px-4 py-3 rounded-md text-base font-medium transition-all text-left ${
                             activeFilter === filter.id
                               ? 'bg-blue-600 text-white'
                               : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
@@ -348,8 +348,8 @@ const Portfolio = () => {
           ) : (
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex items-center mb-4 md:mb-0">
-                <Filter size={18} className="mr-2 text-blue-600" />
-                <h2 className="text-lg font-semibold text-gray-900">Filter Projects</h2>
+                <Filter size={20} className="mr-2 text-blue-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Filter Projects</h2>
               </div>
               
               <div className="flex flex-wrap gap-2 justify-center">
@@ -357,7 +357,7 @@ const Portfolio = () => {
                   <button
                     key={filter.id}
                     onClick={() => handleFilterChange(filter.id)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                    className={`px-4 py-2 rounded-md text-base font-medium transition-all ${
                       activeFilter === filter.id
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
@@ -378,8 +378,8 @@ const Portfolio = () => {
         <section className="py-8 md:py-12 lg:py-16">
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex items-center mb-6 md:mb-8">
-              <Star size={isMobile ? 18 : 20} className="mr-2 md:mr-3 text-blue-600" />
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+              <Star size={isMobile ? 20 : 22} className="mr-2 md:mr-3 text-blue-600" />
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
                 Featured Projects
               </h2>
             </div>
@@ -403,22 +403,22 @@ const Portfolio = () => {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                           
                           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-                            <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full mb-2 bg-blue-600 text-white">
+                            <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-2 bg-blue-600 text-white">
                               {filters.find(filter => filter.id === project.category)?.name}
                             </span>
-                            <h3 className="text-lg md:text-xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
-                            <p className="text-gray-200 text-sm mb-3 line-clamp-2 opacity-90">
+                            <h3 className="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
+                            <p className="text-base md:text-lg text-gray-200 mb-3 line-clamp-2 opacity-90">
                               {project.description}
                             </p>
                             
                             <div className="flex justify-between items-center">
-                              <span className="text-xs md:text-sm text-gray-300">{project.client}</span>
+                              <span className="text-sm md:text-base text-gray-300">{project.client}</span>
                               <button 
                                 onClick={() => isMobile ? openProjectModal(project) : window.location.href = `/projects/${project.id}`}
-                                className="flex items-center text-xs md:text-sm text-white font-medium"
+                                className="flex items-center text-base md:text-lg text-white font-medium"
                               >
                                 <span>View Project</span>
-                                <ArrowRight size={14} className="ml-1" />
+                                <ArrowRight size={18} className="ml-2" />
                               </button>
                             </div>
                           </div>
@@ -430,31 +430,31 @@ const Portfolio = () => {
                 
                 {/* Carousel controls */}
                 <div className="flex justify-between items-center mt-4">
-                  <div className="flex space-x-1 items-center">
+                  <div className="flex space-x-2 items-center">
                     {featuredProjects.map((_, index) => (
                       <button 
                         key={index} 
-                        className={`w-2 h-2 rounded-full ${activeSlide === index ? 'bg-blue-600' : 'bg-gray-300'}`}
+                        className={`w-3 h-3 rounded-full ${activeSlide === index ? 'bg-blue-600' : 'bg-gray-300'}`}
                         onClick={() => setActiveSlide(index)}
                         aria-label={`Go to slide ${index + 1}`}
                       ></button>
                     ))}
                   </div>
                   
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-3">
                     <button 
                       onClick={prevSlide}
-                      className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
                       aria-label="Previous slide"
                     >
-                      <ChevronLeft size={18} />
+                      <ChevronLeft size={20} />
                     </button>
                     <button 
                       onClick={nextSlide}
-                      className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
                       aria-label="Next slide"
                     >
-                      <ChevronRight size={18} />
+                      <ChevronRight size={20} />
                     </button>
                   </div>
                 </div>
@@ -477,19 +477,19 @@ const Portfolio = () => {
                     </div>
                     
                     <div className="absolute bottom-0 left-0 right-0 p-6">
-                      <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-3 bg-blue-600 text-white">
+                      <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-3 bg-blue-600 text-white">
                         {filters.find(filter => filter.id === project.category)?.name}
                       </span>
-                      <h3 className="text-xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
-                      <p className="text-gray-200 text-sm mb-4 opacity-90">
+                      <h3 className="text-2xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
+                      <p className="text-base text-gray-200 mb-4 opacity-90">
                         {project.description}
                       </p>
                       
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-300">{project.client}</span>
-                        <a href={`/projects/${project.id}`} className="flex items-center text-sm text-white font-medium group">
+                        <span className="text-base text-gray-300">{project.client}</span>
+                        <a href={`/projects/${project.id}`} className="flex items-center text-base text-white font-medium group">
                           <span>View Project</span>
-                          <ArrowRight size={16} className="ml-1 transition-transform group-hover:translate-x-1" />
+                          <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
                         </a>
                       </div>
                     </div>
@@ -526,8 +526,8 @@ const Portfolio = () => {
                     />
                     <div className="absolute top-3 right-3">
                       {project.featured && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-600 text-white">
-                          <Star size={12} className="mr-1" />
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium bg-blue-600 text-white">
+                          <Star size={14} className="mr-1" />
                           Featured
                         </span>
                       )}
@@ -536,39 +536,39 @@ const Portfolio = () => {
                   
                   <div className="p-4 md:p-6">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-base md:text-lg font-bold text-gray-900 leading-tight">{project.title}</h3>
-                      <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{project.year}</span>
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 leading-tight">{project.title}</h3>
+                      <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{project.year}</span>
                     </div>
                     
-                    <p className="text-xs md:text-sm text-gray-600 mb-3 md:mb-4 line-clamp-2">
+                    <p className="text-base md:text-lg text-gray-600 mb-3 md:mb-4 line-clamp-2">
                       {project.description}
                     </p>
                     
-                    <div className="flex flex-wrap gap-1 mb-3 md:mb-4">
+                    <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
                       {project.tags.slice(0, isMobile ? 2 : 3).map((tag, i) => (
                         <span 
                           key={i} 
-                          className="inline-block px-2 py-1 text-xs rounded bg-gray-100 text-gray-700"
+                          className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700"
                         >
                           {tag}
                         </span>
                       ))}
                       {project.tags.length > (isMobile ? 2 : 3) && (
-                        <span className="inline-block px-2 py-1 text-xs rounded bg-gray-100 text-gray-700">
+                        <span className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700">
                           +{project.tags.length - (isMobile ? 2 : 3)}
                         </span>
                       )}
                     </div>
                     
                     <div className="pt-3 md:pt-4 mt-1 md:mt-2 border-t border-gray-100 flex justify-between items-center">
-                      <span className="text-xs text-gray-500">Client: <span className="font-medium text-gray-900">{project.client}</span></span>
+                      <span className="text-sm text-gray-500">Client: <span className="font-medium text-gray-900">{project.client}</span></span>
                       {!isMobile && (
                         <a 
                           href={`/projects/${project.id}`}
-                          className="flex items-center text-xs md:text-sm font-medium text-blue-600 hover:text-blue-700"
+                          className="flex items-center text-base md:text-lg font-medium text-blue-600 hover:text-blue-700"
                         >
                           <span>Details</span>
-                          <ExternalLink size={isMobile ? 12 : 14} className="ml-1" />
+                          <ExternalLink size={isMobile ? 16 : 18} className="ml-1" />
                         </a>
                       )}
                     </div>
@@ -583,10 +583,10 @@ const Portfolio = () => {
             <div className="mt-8 md:mt-12 text-center">
               <button 
                 onClick={loadMore}
-                className="px-4 md:px-6 py-2 md:py-3 rounded-md bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center mx-auto"
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center mx-auto text-base md:text-lg"
               >
                 <span>{isMobile ? "Load More" : "Load More Projects"}</span>
-                <Plus size={isMobile ? 16 : 18} className="ml-2" />
+                <Plus size={isMobile ? 18 : 20} className="ml-2" />
               </button>
             </div>
           )}
@@ -597,10 +597,10 @@ const Portfolio = () => {
       <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-6 md:mb-10">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-4 text-gray-900">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 text-gray-900">
               Our Impact in Numbers
             </h2>
-            <p className="max-w-2xl mx-auto text-sm md:text-base text-gray-600">
+            <p className="max-w-2xl mx-auto text-base md:text-lg text-gray-600">
               Since 2008, we've been creating exceptional experiences for brands across Nigeria
             </p>
           </div>
@@ -608,47 +608,47 @@ const Portfolio = () => {
           {isMobile ? (
             <div className="overflow-x-auto hide-scrollbar pb-4">
               <div className="flex space-x-4 px-2 min-w-max">
-                <div className="w-36 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                  <div className="text-2xl font-bold mb-1 text-blue-600">500+</div>
-                  <p className="text-xs text-gray-600">Projects Completed</p>
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">500+</div>
+                  <p className="text-sm text-gray-600">Projects Completed</p>
                 </div>
                 
-                <div className="w-36 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                  <div className="text-2xl font-bold mb-1 text-blue-600">15+</div>
-                  <p className="text-xs text-gray-600">Years Experience</p>
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">15+</div>
+                  <p className="text-sm text-gray-600">Years Experience</p>
                 </div>
                 
-                <div className="w-36 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                  <div className="text-2xl font-bold mb-1 text-blue-600">200+</div>
-                  <p className="text-xs text-gray-600">Satisfied Clients</p>
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">200+</div>
+                  <p className="text-sm text-gray-600">Satisfied Clients</p>
                 </div>
                 
-                <div className="w-36 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                  <div className="text-2xl font-bold mb-1 text-blue-600">12</div>
-                  <p className="text-xs text-gray-600">Industry Awards</p>
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">12</div>
+                  <p className="text-sm text-gray-600">Industry Awards</p>
                 </div>
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-blue-600">500+</div>
-                <p className="text-sm text-gray-600">Projects Completed</p>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">500+</div>
+                <p className="text-base text-gray-600">Projects Completed</p>
               </div>
               
               <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-blue-600">15+</div>
-                <p className="text-sm text-gray-600">Years Experience</p>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">15+</div>
+                <p className="text-base text-gray-600">Years Experience</p>
               </div>
               
               <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-blue-600">200+</div>
-                <p className="text-sm text-gray-600">Satisfied Clients</p>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">200+</div>
+                <p className="text-base text-gray-600">Satisfied Clients</p>
               </div>
               
               <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
-                <div className="text-2xl md:text-3xl lg:text-4xl font-bold mb-1 text-blue-600">12</div>
-                <p className="text-sm text-gray-600">Industry Awards</p>
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">12</div>
+                <p className="text-base text-gray-600">Industry Awards</p>
               </div>
             </div>
           )}
@@ -659,25 +659,25 @@ const Portfolio = () => {
       <section className="py-8 md:py-12 lg:py-16 bg-blue-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 md:mb-4 text-gray-900">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 text-gray-900">
               Ready to Transform Your Next Event?
             </h2>
-            <p className="text-sm md:text-base text-gray-700 mb-6 md:mb-8">
+            <p className="text-base md:text-lg lg:text-xl text-gray-700 mb-6 md:mb-8">
               Let's collaborate to create a memorable branded experience that leaves a lasting impression.
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
               <a 
                 href="/contact" 
-                className="px-4 md:px-6 py-3 rounded-md font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 flex items-center justify-center"
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md text-base md:text-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 flex items-center justify-center"
               >
                 <span>Request a Quote</span>
-                <ArrowRight size={isMobile ? 16 : 18} className="ml-2" />
+                <ArrowRight size={isMobile ? 18 : 20} className="ml-2" />
               </a>
               
               <a 
                 href="/projects" 
-                className="px-4 md:px-6 py-3 rounded-md font-medium bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 justify-center"
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md text-base md:text-lg font-medium bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 justify-center"
               >
                 View All Projects
               </a>
@@ -703,18 +703,18 @@ const Portfolio = () => {
                 onClick={closeProjectModal}
                 className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-white"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
               {selectedProject.featured && (
                 <div className="absolute top-2 left-2">
-                  <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-600 text-white">
-                    <Star size={12} className="mr-1" />
+                  <span className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium bg-blue-600 text-white">
+                    <Star size={14} className="mr-1" />
                     Featured
                   </span>
                 </div>
               )}
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-2 bg-blue-600 text-white">
+                <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-2 bg-blue-600 text-white">
                   {filters.find(filter => filter.id === selectedProject.category)?.name}
                 </span>
               </div>
@@ -722,20 +722,20 @@ const Portfolio = () => {
             
             <div className="p-4">
               <div className="flex justify-between items-start mb-3">
-                <h3 className="text-lg font-bold text-gray-900">{selectedProject.title}</h3>
-                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{selectedProject.year}</span>
+                <h3 className="text-xl font-bold text-gray-900">{selectedProject.title}</h3>
+                <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{selectedProject.year}</span>
               </div>
               
-              <p className="text-sm text-gray-700 mb-4">
+              <p className="text-base text-gray-700 mb-4">
                 {selectedProject.description}
               </p>
               
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Tags:</h4>
+              <h4 className="text-base font-medium text-gray-900 mb-2">Tags:</h4>
               <div className="flex flex-wrap gap-2 mb-4">
                 {selectedProject.tags.map((tag, i) => (
                   <span 
                     key={i} 
-                    className="inline-block px-2 py-1 text-xs rounded bg-gray-100 text-gray-700"
+                    className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700"
                   >
                     {tag}
                   </span>
@@ -745,15 +745,15 @@ const Portfolio = () => {
               <div className="pt-4 border-t border-gray-200">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h4 className="text-sm font-medium text-gray-900">Client:</h4>
-                    <p className="text-sm text-gray-700">{selectedProject.client}</p>
+                    <h4 className="text-base font-medium text-gray-900">Client:</h4>
+                    <p className="text-base text-gray-700">{selectedProject.client}</p>
                   </div>
                   <a 
                     href={`/projects/${selectedProject.id}`}
-                    className="flex items-center text-sm font-medium text-blue-600 bg-blue-50 px-3 py-2 rounded-md"
+                    className="flex items-center text-base font-medium text-blue-600 bg-blue-50 px-4 py-2 rounded-md"
                   >
                     <span>View Full Project</span>
-                    <ArrowRight size={14} className="ml-1" />
+                    <ArrowRight size={16} className="ml-2" />
                   </a>
                 </div>
               </div>

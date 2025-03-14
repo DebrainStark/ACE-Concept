@@ -72,6 +72,26 @@ const Navigation = () => {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </a>
             
+
+            <a 
+              href="/about" 
+              className="px-3 py-2 text-gray-800 hover:text-blue-600 transition-colors duration-300 relative group font-medium"
+            >
+              About
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+
+            
+            
+            <a 
+              href="/portfolio" 
+              className="px-3 py-2 text-gray-800 hover:text-blue-600 transition-colors duration-300 relative group font-medium"
+            >
+              Portfolio
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            
+            
             {/* Services Dropdown */}
             <div className="relative group">
               <button
@@ -103,22 +123,6 @@ const Navigation = () => {
                 </div>
               </div>
             </div>
-            
-            <a 
-              href="/portfolio" 
-              className="px-3 py-2 text-gray-800 hover:text-blue-600 transition-colors duration-300 relative group font-medium"
-            >
-              Portfolio
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            
-            <a 
-              href="/about" 
-              className="px-3 py-2 text-gray-800 hover:text-blue-600 transition-colors duration-300 relative group font-medium"
-            >
-              About
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
-            </a>
             
             {/* CTA Button */}
             <a 
@@ -173,7 +177,24 @@ const Navigation = () => {
           >
             Home
           </a>
+        
+          <a
+            href="/about"
+            className="block px-3 py-2 rounded-lg text-gray-800 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            About
+          </a>
           
+          <a
+            href="/portfolio"
+            className="block px-3 py-2 rounded-lg text-gray-800 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Portfolio
+          </a>
+        
+
           {/* Mobile Services Dropdown */}
           <div>
             <button
@@ -206,22 +227,6 @@ const Navigation = () => {
               ))}
             </div>
           </div>
-          
-          <a
-            href="/portfolio"
-            className="block px-3 py-2 rounded-lg text-gray-800 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Portfolio
-          </a>
-          
-          <a
-            href="/about"
-            className="block px-3 py-2 rounded-lg text-gray-800 hover:text-blue-600 hover:bg-blue-50 transition-colors duration-200"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            About
-          </a>
           
           {/* Mobile Contact Info */}
           <div className="pt-4 mt-4 border-t border-gray-100">

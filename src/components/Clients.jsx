@@ -53,18 +53,18 @@ const Avatar = ({ name, bgColor, image }) => {
         <img
           src={image}
           alt={name}
-          className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-gray-800 group-hover:border-blue-500 transition-all duration-300 shadow-lg"
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-gray-800 group-hover:border-blue-500 transition-all duration-300 shadow-lg"
         />
       ) : (
         <div
-          className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-xs sm:text-sm md:text-base text-white border-2 border-gray-800 group-hover:border-blue-500 transition-all duration-300 shadow-lg"
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center text-xs sm:text-sm text-white border-2 border-gray-800 group-hover:border-blue-500 transition-all duration-300 shadow-lg"
           style={{ backgroundColor: bgColor }}
         >
           {initials}
         </div>
       )}
       <div 
-        className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border border-gray-800"
+        className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center border border-gray-800"
         style={{ backgroundColor: bgColor }}
       >
         <User size={10} className="text-white" />
@@ -126,7 +126,7 @@ const ClientSection = () => {
     return () => clearInterval(interval);
   }, [activeIndex]);
 
-  // Parallax effect for mouse movement
+  // Parallax effect for mouse movement - lightweight version
   useEffect(() => {
     if (windowWidth < 1024) return; // Only enable parallax on desktop
     
@@ -143,12 +143,12 @@ const ClientSection = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [windowWidth]);
 
-  // Calculate parallax movement
+  // Calculate parallax movement - reduced effect
   const getParallaxStyle = (depth = 1) => {
     if (windowWidth < 1024) return {}; // Disable parallax on mobile/tablet
     
-    const xMovement = (mousePosition.x - 0.5) * depth * 20;
-    const yMovement = (mousePosition.y - 0.5) * depth * 20;
+    const xMovement = (mousePosition.x - 0.5) * depth * 10; // Reduced from 20 to 10
+    const yMovement = (mousePosition.y - 0.5) * depth * 10; // Reduced from 20 to 10
     return {
       transform: `translate(${xMovement}px, ${yMovement}px)`,
     };
@@ -175,7 +175,7 @@ const ClientSection = () => {
     setTimeout(() => setIsAnimating(false), 600);
   };
 
-  // Get card position styles based on index and active index
+  // Get card position styles based on index and active index - more subtle effect
   const getCardStyle = (index) => {
     // Position variables
     const diff = index - activeIndex;
@@ -190,7 +190,7 @@ const ClientSection = () => {
     let zIndex = 40 - Math.abs(diff) * 10;
     let opacity = 1;
     
-    // Determine position based on normalized difference
+    // Determine position based on normalized difference - reduced offsets for desktop
     if (normalizedDiff === 0) { // Active card
       translateX = '0%';
       translateY = '0%';
@@ -198,24 +198,24 @@ const ClientSection = () => {
       rotate = '0deg';
       zIndex = 50;
     } else if (normalizedDiff === 1 || normalizedDiff === testimonials.length - 1) { // Next/Prev cards
-      translateX = normalizedDiff === 1 ? (isMobile ? '75%' : '60%') : (isMobile ? '-75%' : '-60%');
-      translateY = '5%';
-      scale = 0.85;
-      rotate = normalizedDiff === 1 ? '5deg' : '-5deg';
+      translateX = normalizedDiff === 1 ? (isMobile ? '75%' : '50%') : (isMobile ? '-75%' : '-50%');
+      translateY = '2%'; // Reduced from 5% to 2%
+      scale = 0.9; // Increased from 0.85 to 0.9
+      rotate = normalizedDiff === 1 ? '3deg' : '-3deg'; // Reduced from 5deg to 3deg
       zIndex = 40;
     } else { // Stacked cards
-      // Cards behind current
+      // Cards behind current - reduced offsets
       if (normalizedDiff <= testimonials.length / 2) {
-        translateX = (isMobile ? '85%' : '80%');
-        translateY = '10%';
-        rotate = '10deg';
+        translateX = (isMobile ? '85%' : '65%');
+        translateY = '4%'; // Reduced from 10% to 4%
+        rotate = '6deg'; // Reduced from 10deg to 6deg
       } else {
-        translateX = (isMobile ? '-85%' : '-80%');
-        translateY = '10%';
-        rotate = '-10deg';
+        translateX = (isMobile ? '-85%' : '-65%');
+        translateY = '4%'; // Reduced from 10% to 4%
+        rotate = '-6deg'; // Reduced from 10deg to 6deg
       }
-      scale = 0.7;
-      opacity = 0.6;
+      scale = 0.8; // Increased from 0.7 to 0.8
+      opacity = 0.7; // Increased from 0.6 to 0.7
       zIndex = 30;
     }
     
@@ -234,37 +234,32 @@ const ClientSection = () => {
   return (
     <section 
       ref={containerRef}
-      className="py-10 sm:py-14 md:py-16 lg:py-20 bg-gradient-to-b from-black via-gray-900 to-black text-white relative overflow-hidden"
+      className="py-10 sm:py-14 md:py-16 lg:py-20 bg-gradient-to-b from-gray-900 to-black text-white relative overflow-hidden"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] -top-64 -left-64 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute w-[300px] sm:w-[400px] md:w-[500px] lg:w-[600px] h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] -bottom-64 -right-64 bg-blue-700 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 rounded-full blur-3xl opacity-30"></div>
+      {/* Simplified background elements - reduced size and blur */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute w-[200px] sm:w-[300px] md:w-[400px] lg:w-[500px] h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] -top-64 -left-64 bg-blue-500 rounded-full blur-2xl animate-pulse"></div>
+        <div className="absolute w-[200px] sm:w-[300px] md:w-[400px] lg:w-[500px] h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] -bottom-64 -right-64 bg-blue-700 rounded-full blur-2xl animate-pulse"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16" style={getParallaxStyle(0.1)}>
-          <span className="inline-block px-3 sm:px-4 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs sm:text-sm font-medium tracking-wider uppercase mb-3 sm:mb-4">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="text-center mb-8 sm:mb-10" style={getParallaxStyle(0.1)}>
+          <span className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium tracking-wider uppercase mb-3">
             CLIENT TESTIMONIALS
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
             What Our <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Clients</span> Say
           </h2>
-          <div className="mt-3 sm:mt-4 w-16 sm:w-24 h-1 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
-          <p className="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto">
-            Discover why leading brands trust our expertise in event experiences, 
-            custom fabrication, and innovative LED solutions
-          </p>
+          <div className="mt-3 w-16 sm:w-20 h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 mx-auto rounded-full"></div>
         </div>
 
         {/* Card Sorting Testimonials */}
         <div className="relative" style={getParallaxStyle(0.2)}>
-          {/* Navigation buttons */}
+          {/* Navigation buttons - positioned closer to content */}
           <button 
             onClick={prevSlide}
             disabled={isAnimating}
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 border border-gray-700 text-white flex items-center justify-center hover:bg-blue-900/50 hover:border-blue-500 transition-all duration-300 group"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 border border-gray-700 text-white flex items-center justify-center hover:bg-blue-900/40 hover:border-blue-500 transition-all duration-300 group"
             aria-label="Previous testimonial"
           >
             <ChevronLeft size={16} className="group-hover:scale-110 transition-transform" />
@@ -273,7 +268,7 @@ const ClientSection = () => {
           <button 
             onClick={nextSlide}
             disabled={isAnimating}
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/50 border border-gray-700 text-white flex items-center justify-center hover:bg-blue-900/50 hover:border-blue-500 transition-all duration-300 group"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-50 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/30 border border-gray-700 text-white flex items-center justify-center hover:bg-blue-900/40 hover:border-blue-500 transition-all duration-300 group"
             aria-label="Next testimonial"
           >
             <ChevronRight size={16} className="group-hover:scale-110 transition-transform" />
@@ -282,14 +277,14 @@ const ClientSection = () => {
           {/* Card Carousel */}
           <div 
             ref={cardsRef}
-            className="relative h-[420px] sm:h-[380px] md:h-[340px] mx-auto"
+            className="relative h-[360px] sm:h-[320px] md:h-[300px] mx-auto"
             style={{ perspective: '1000px' }}
           >
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
                 onClick={() => goToSlide(index)}
-                className={`absolute top-0 left-0 right-0 mx-auto w-full max-w-3xl cursor-pointer transition-all duration-600 ease-out`}
+                className={`absolute top-0 left-0 right-0 mx-auto w-[92%] sm:w-[85%] md:w-[80%] max-w-2xl cursor-pointer transition-all duration-600 ease-out`}
                 style={{
                   ...getCardStyle(index),
                   transformOrigin: 'center center',
@@ -298,20 +293,19 @@ const ClientSection = () => {
                 }}
               >
                 <div 
-                  className={`group relative w-full bg-gradient-to-b from-gray-800/80 to-gray-900/80 backdrop-blur-sm p-3 sm:p-5 md:p-6 border border-gray-700 rounded-xl shadow-xl ${
-                    activeIndex === index ? 'ring-2 ring-blue-500/50' : ''
+                  className={`group relative w-full bg-gradient-to-b from-gray-800/80 to-gray-900/90 backdrop-blur-sm p-3 sm:p-4 border border-gray-700/70 rounded-xl shadow-lg ${
+                    activeIndex === index ? 'ring-1 ring-blue-500/40' : ''
                   }`}
                 >
-                  {/* Quote icon */}
-                  <div className="absolute -top-3 -left-3 sm:-top-5 sm:-left-5 text-blue-500/30 transform -rotate-12">
-                    <Quote size={isMobile ? 40 : 64} strokeWidth={1} />
+                  {/* Quote icon - reduced size */}
+                  <div className="absolute -top-2 -left-2 sm:-top-3 sm:-left-3 text-blue-500/20 transform -rotate-12">
+                    <Quote size={isMobile ? 32 : 40} strokeWidth={1} />
                   </div>
                   
-                  {/* Decorative elements */}
-                  <div className="absolute -top-5 -right-5 sm:-top-10 sm:-right-10 w-20 sm:w-40 h-20 sm:h-40 bg-blue-500/5 rounded-full blur-xl"></div>
-                  <div className="absolute -bottom-5 -left-5 sm:-bottom-10 sm:-left-10 w-20 sm:w-40 h-20 sm:h-40 bg-blue-600/5 rounded-full blur-xl"></div>
+                  {/* Decorative elements - simplified */}
+                  <div className="absolute -top-3 -right-3 w-16 h-16 sm:w-24 sm:h-24 bg-blue-500/5 rounded-full blur-lg"></div>
                   
-                  <div className={`flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start text-center md:text-left relative z-10`}>
+                  <div className={`flex flex-col md:flex-row gap-3 md:gap-4 items-center md:items-start text-center md:text-left relative z-10`}>
                     {/* Avatar and info */}
                     <div className="shrink-0 flex flex-col items-center">
                       <Avatar 
@@ -320,11 +314,11 @@ const ClientSection = () => {
                         image={testimonial.image} 
                       />
                       <StarRating rating={testimonial.rating} />
-                      <h3 className="text-sm sm:text-base md:text-lg font-bold text-white mt-1 sm:mt-2 md:mt-3">
+                      <h3 className="text-sm sm:text-base font-bold text-white mt-1 sm:mt-2">
                         {testimonial.name}
                       </h3>
                       <p 
-                        className="text-2xs sm:text-xs font-medium px-2 sm:px-3 py-0.5 rounded-full mt-1"
+                        className="text-2xs sm:text-xs font-medium px-2 py-0.5 rounded-full mt-1"
                         style={{ 
                           backgroundColor: `${testimonial.bgColor}20`,
                           color: testimonial.bgColor 
@@ -335,17 +329,17 @@ const ClientSection = () => {
                     </div>
                     
                     {/* Testimonial content */}
-                    <div className="md:border-l border-gray-700 md:pl-4 lg:pl-6 flex-1">
-                      <p className="text-xs sm:text-sm md:text-base text-gray-300 italic leading-relaxed">
+                    <div className="md:border-l border-gray-700/50 md:pl-4 flex-1">
+                      <p className="text-xs sm:text-sm text-gray-300 italic leading-relaxed line-clamp-4">
                         "{testimonial.feedback}"
                       </p>
                       
-                      <div className="mt-3 sm:mt-4 flex items-center">
+                      <div className="mt-2 sm:mt-3 flex items-center">
                         <div 
-                          className="h-1 w-6 sm:w-8 rounded-full"
+                          className="h-0.5 w-6 rounded-full"
                           style={{ backgroundColor: testimonial.bgColor }}
                         ></div>
-                        <p className="ml-2 text-2xs sm:text-xs text-gray-400">
+                        <p className="ml-2 text-2xs text-gray-400">
                           Project completed in 2023
                         </p>
                       </div>
@@ -356,17 +350,17 @@ const ClientSection = () => {
             ))}
           </div>
           
-          {/* Dots Indicators */}
-          <div className="flex justify-center mt-6 sm:mt-8 space-x-1 sm:space-x-2">
+          {/* Dots Indicators - simplified */}
+          <div className="flex justify-center mt-4 sm:mt-6 space-x-1">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
                 disabled={isAnimating}
-                className={`h-2 sm:h-3 rounded-full transition-all duration-300 ${
+                className={`h-1.5 rounded-full transition-all duration-300 ${
                   index === activeIndex 
-                    ? "bg-blue-500 w-4 sm:w-6" 
-                    : "bg-white/30 hover:bg-white/50 w-2 sm:w-3"
+                    ? "bg-blue-500 w-5" 
+                    : "bg-white/20 hover:bg-white/40 w-1.5"
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
               />
@@ -374,33 +368,22 @@ const ClientSection = () => {
           </div>
         </div>
 
-        <div className="text-center mt-8 sm:mt-12 lg:mt-16">
-          <button className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 overflow-hidden rounded-full text-white text-sm sm:text-base font-medium">
+        <div className="text-center mt-8 sm:mt-10">
+          <a 
+            href="/contact"
+            className="inline-block group relative px-6 py-2.5 bg-blue-600 overflow-hidden rounded-lg text-white text-sm font-medium"
+          >
             <span className="relative z-10 flex items-center">
               Work With Us
-              <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" size={isMobile ? 16 : 18} />
+              <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
             </span>
             <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-            <span className="absolute -inset-x-full inset-y-0 w-3/4 bg-white/20 skew-x-12 group-hover:animate-shine"></span>
-          </button>
+          </a>
         </div>
       </div>
       
       {/* CSS Animations */}
       <style jsx>{`
-        @keyframes shine {
-          0% {
-            transform: translateX(-100%) skewX(-15deg);
-          }
-          100% {
-            transform: translateX(200%) skewX(-15deg);
-          }
-        }
-        
-        .group-hover\:animate-shine:hover {
-          animation: shine 1.5s ease-in-out infinite;
-        }
-        
         .duration-600 {
           transition-duration: 600ms;
         }

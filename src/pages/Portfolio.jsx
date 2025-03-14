@@ -1,204 +1,259 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Users, Award, Target, Shield, Clock, MapPin, Star, ChevronDown, ChevronRight, ChevronLeft, X } from "lucide-react";
+import { ArrowRight, Filter, Star, Plus, ExternalLink, ChevronLeft, ChevronRight, X } from "lucide-react";
 
-const AboutUs = () => {
-  const [visibleSections, setVisibleSections] = useState({});
-  const [expandedSections, setExpandedSections] = useState({});
+const Portfolio = () => {
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [visibleItems, setVisibleItems] = useState(6);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
-  const [activeServiceIndex, setActiveServiceIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState('purpose');
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
   
-  const sectionRefs = useRef({
-    hero: null,
-    about: null,
-    services: null,
-    team: null,
-    goals: null
-  });
-
-  // Track window width for responsive behavior
+  const filterRef = useRef(null);
+  const featuredCarouselRef = useRef(null);
+  const [isFilterSticky, setIsFilterSticky] = useState(false);
+  
+  // Detect window size for responsive behavior
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
     
-    // Add debounce for better performance
-    let timeoutId = null;
-    const debouncedResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(handleResize, 100);
-    };
-    
-    window.addEventListener('resize', debouncedResize);
+    window.addEventListener('resize', handleResize);
     handleResize(); // Set initial size
     
-    return () => {
-      window.removeEventListener('resize', debouncedResize);
-      clearTimeout(timeoutId);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+  
+  // Project filtering
+  const filters = [
+    { id: "all", name: "All Projects" },
+    { id: "redcarpet", name: "Red Carpet" },
+    { id: "fabrication", name: "Fabrication" },
+    { id: "signage", name: "Event Signage" },
+    { id: "led", name: "LED Installations" }
+  ];
+  
+  // Portfolio projects
+  const projects = [
+    {
+      id: 1,
+      title: "Lagos Fashion Week Media Wall",
+      category: "redcarpet",
+      description: "Custom fabricated media wall with integrated LED lighting for Nigeria's premier fashion event",
+      image: "Cubana.png",
+      tags: ["Media Wall", "Red Carpet", "Fashion Event"],
+      client: "Lagos Fashion Week",
+      year: "2024"
+    },
+    {
+      id: 2,
+      title: "Custom LED Stage Backdrop",
+      category: "led",
+      description: "Interactive LED display wall for corporate annual conference with dynamic content management",
+      image: "Cubana.png",
+      tags: ["LED Wall", "Corporate", "Interactive"],
+      client: "NigeriaBank Ltd",
+      year: "2023",
+      featured: true
+    },
+    {
+      id: 3,
+      title: "Music Awards Branding Package",
+      category: "signage",
+      description: "Comprehensive event signage and wayfinding system for major music awards ceremony",
+      image: "Cubana.png",
+      tags: ["Signage", "Awards", "Branding"],
+      client: "Nigeria Music Awards",
+      year: "2023"
+    },
+    {
+      id: 4,
+      title: "Product Launch Stage Design",
+      category: "fabrication",
+      description: "Custom stage with integrated product display pedestals and dynamic lighting",
+      image: "Cubana.png",
+      tags: ["Stage Design", "Product Launch", "Fabrication"],
+      client: "TechNigeria",
+      year: "2024",
+      featured: true
+    },
+    {
+      id: 5,
+      title: "Film Festival Red Carpet Experience",
+      category: "redcarpet",
+      description: "Premium red carpet setup with sponsor integration and photo backdrop",
+      image: "Cubana.png",
+      tags: ["Red Carpet", "Film Festival", "VIP"],
+      client: "Lagos International Film Festival",
+      year: "2023"
+    },
+    {
+      id: 6,
+      title: "Corporate Event LED Totems",
+      category: "led",
+      description: "Series of programmable LED totems for event wayfinding and information display",
+      image: "Ciroc.png",
+      tags: ["LED", "Corporate Event", "Wayfinding"],
+      client: "Global Finance Summit",
+      year: "2024"
+    },
+    {
+      id: 7,
+      title: "Fashion Brand Pop-up Store",
+      category: "fabrication",
+      description: "Custom fabricated pop-up retail environment with branded fixtures",
+      image: "Cubana.png",
+      tags: ["Retail", "Pop-up", "Fabrication"],
+      client: "Lagos Street Fashion",
+      year: "2023"
+    },
+    {
+      id: 8,
+      title: "Wedding Event Signage Suite",
+      category: "signage",
+      description: "Comprehensive signage package including entrance, table numbers, and directional signs",
+      image: "Ciroc.png",
+      tags: ["Wedding", "Signage", "Custom"],
+      client: "Private Client",
+      year: "2024"
+    },
+    {
+      id: 9,
+      title: "Sports Awards Trophy Stage",
+      category: "fabrication",
+      description: "Custom stage with integrated LED screens and trophy presentation platform",
+      image: "Cubana.png",
+      tags: ["Sports", "Awards", "Stage Design"],
+      client: "Nigeria Sports Authority",
+      year: "2023"
+    },
+    {
+      id: 10,
+      title: "Charity Gala Media Backdrop",
+      category: "redcarpet",
+      description: "Sponsor-integrated media wall with premium finishes for high-end charity event",
+      image: "Ciroc.png",
+      tags: ["Charity", "Media Wall", "Gala"],
+      client: "Children's Foundation Nigeria",
+      year: "2024"
+    },
+    {
+      id: 11,
+      title: "Conference LED Data Dashboard",
+      category: "led",
+      description: "Real-time data visualization LED wall for financial conference",
+      image: "Cubana.png",
+      tags: ["Data Viz", "Conference", "Interactive"],
+      client: "West Africa Finance Forum",
+      year: "2023",
+      featured: true
+    },
+    {
+      id: 12,
+      title: "Music Festival Entrance Arch",
+      category: "signage",
+      description: "Large-scale entrance structure with integrated lighting and sponsor branding",
+      image: "Cubana.png",
+      tags: ["Festival", "Entrance", "Branding"],
+      client: "Lagos Music Festival",
+      year: "2024"
+    }
+  ];
 
-  // Show/hide back to top button
+  // Filter projects based on active filter
+  const filteredProjects = activeFilter === "all" 
+    ? projects 
+    : projects.filter(project => project.category === activeFilter);
+
+  const featuredProjects = filteredProjects.filter(project => project.featured);
+  
+  // Animation on page load with improved stability
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Handle scroll for sticky filter with throttling for better performance
+  useEffect(() => {
+    let ticking = false;
+    
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 500);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (filterRef.current) {
+            const filterPosition = filterRef.current.getBoundingClientRect().top;
+            setIsFilterSticky(filterPosition <= 0);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // More efficient scroll handling with IntersectionObserver
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.15
-    };
-
-    const observerCallback = (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setVisibleSections(prev => ({
-            ...prev,
-            [entry.target.id]: true
-          }));
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+  
+  // Function to load more projects
+  const loadMore = () => {
+    setVisibleItems(prev => Math.min(prev + 6, filteredProjects.length));
+  };
+  
+  // Handle filter change
+  const handleFilterChange = (filterId) => {
+    setActiveFilter(filterId);
+    setVisibleItems(6);
+    setIsFilterOpen(false);
     
-    // Observe all sections
-    Object.values(sectionRefs.current).forEach(ref => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => {
-      Object.values(sectionRefs.current).forEach(ref => {
-        if (ref) observer.unobserve(ref);
+    // Reset carousel position
+    setActiveSlide(0);
+    
+    // Scroll back to top of portfolio section if we're below it
+    if (filterRef.current && window.scrollY > filterRef.current.offsetTop) {
+      window.scrollTo({
+        top: filterRef.current.offsetTop - 10,
+        behavior: 'smooth'
       });
-    };
-  }, []);
-
-  // Company information
-  const companyInfo = {
-    founded: "2008",
-    director: "OLATUNDE DARAMOLA",
-    purpose: "To be a voice within the Branding and Fabrication Industry by providing quality, bespoke and enhanced services, forge client relationship and profitability.",
-    vision: "To provide quality services that exceeds the expectations of our esteemed customers.",
-    mission: "To enhance our clients brands, build long term relationships with our customers and clients and provide exceptional Product services by pursuing business through innovation and quality service delivery."
-  };
-
-  // Team members details
-  const teamMembers = [
-    {
-      role: "Managing Director",
-      description: "Oversees all aspects of the company, including branding, fabrication, sales, and marketing. Sets the company's overall vision and strategy."
-    },
-    {
-      role: "Creative Director",
-      description: "Oversees the company's branding and design team. Develops and executes creative campaigns for clients."
-    },
-    {
-      role: "Fabrication Manager",
-      description: "Oversees the company's fabrication team. Manages the production of branded products and materials."
-    },
-    {
-      role: "Project Manager",
-      description: "Oversees the day-to-day execution of individual projects."
-    },
-    {
-      role: "Branding Specialist",
-      description: "Managing branding projects and all client brand identity and strategy for campaigns."
     }
-  ];
-
-  // Services provided by the company
-  const services = [
-    {
-      title: "Red Carpet Media",
-      description: "Branded experiences for VIP events, including media walls, step-and-repeat backdrops, and premium branding solutions.",
-      icon: "activity"
-    },
-    {
-      title: "Custom Stage Fabrication",
-      description: "Crafting and building custom furniture, fixtures, stages and environments that elevate your event or brand activation.",
-      icon: "star"
-    },
-    {
-      title: "Event Signage",
-      description: "Custom designed props and signage for all environments, produced to the highest quality standards.",
-      icon: "file"
-    },
-    {
-      title: "LED Installations",
-      description: "Specialized design of custom built LED and laser-cutting services for all fabrications and branding needs.",
-      icon: "monitor"
-    },
-    {
-      title: "Branding & Design",
-      description: "Strategic brand identity development that meets client needs and stands out in the marketplace.",
-      icon: "book-open"
-    },
-    {
-      title: "Customer Support",
-      description: "End-to-end support throughout the branding and fabrication process, ensuring a seamless client experience.",
-      icon: "help-circle"
-    }
-  ];
-
-  // Goals for the company's future
-  const goals = [
-    "Regional expansion in the field of branding and develop a strong base of satisfied customers.",
-    "Increase the assets and investments of the company to support the development of services.",
-    "To build good reputation in branding and fabrication and become a key player in the print industry."
-  ];
-
-  // Animation class for fade-in effect
-  const getFadeClass = (sectionId) => 
-    visibleSections[sectionId] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8";
-
-  // Toggle section expansion on mobile
-  const toggleSection = (sectionId) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionId]: !prev[sectionId]
-    }));
   };
 
-  // Move to next service in the carousel
-  const nextService = () => {
-    setActiveServiceIndex((prev) => (prev + 1) % services.length);
+  // Carousel navigation
+  const nextSlide = () => {
+    setActiveSlide(prev => (prev + 1) % featuredProjects.length);
   };
 
-  // Move to previous service in the carousel
-  const prevService = () => {
-    setActiveServiceIndex((prev) => (prev === 0 ? services.length - 1 : prev - 1));
+  const prevSlide = () => {
+    setActiveSlide(prev => prev === 0 ? featuredProjects.length - 1 : prev - 1);
   };
 
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+  // Open project modal on mobile
+  const openProjectModal = (project) => {
+    setSelectedProject(project);
+    setIsProjectModalOpen(true);
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
   };
 
-  // Check if we're on a mobile device
+  // Close project modal
+  const closeProjectModal = () => {
+    setIsProjectModalOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  // Check if we're on mobile
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
 
   return (
     <div className="bg-white text-gray-900 py-16">
-      {/* Hero Section - Simplified for mobile */}
-      <section 
-        id="hero" 
-        ref={el => sectionRefs.current.hero = el}
-        className="relative bg-blue-900 py-16 md:py-28 lg:py-36 overflow-hidden"
-      >
-        {/* Subtle grid background */}
+      {/* Clean, professional header */}
+      <div className="relative bg-blue-900 py-16 md:py-20 lg:py-28">
         <div className="absolute inset-0 opacity-20">
           <svg
             width="100%"
@@ -207,633 +262,504 @@ const AboutUs = () => {
             preserveAspectRatio="none"
             className="absolute inset-0"
           >
-            <pattern
-              id="grid"
-              width="20"
-              height="20"
-              patternUnits="userSpaceOnUse"
-            >
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="0.5" />
-            </pattern>
+            <defs>
+              <pattern
+                id="grid"
+                width="10"
+                height="10"
+                patternUnits="userSpaceOnUse"
+              >
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+              </pattern>
+            </defs>
             <rect width="100%" height="100%" fill="url(#grid)" />
           </svg>
         </div>
         
-        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-white">
-              Our <span className="text-blue-300">Story</span>
+        <div className="relative container mx-auto px-4 md:px-6 z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-white">
+              Our Portfolio
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-blue-100 mb-6 md:mb-10 leading-relaxed max-w-xl mx-auto">
-              {isMobile ? 
-                `Creating extraordinary branded experiences since ${companyInfo.founded}` : 
-                `Transforming visions into extraordinary branded experiences since ${companyInfo.founded}`
-              }
+            <p className="text-lg md:text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto">
+              {isMobile ? "Showcasing our innovative branded experiences" : "Showcasing innovative branded experiences that elevate our clients' presence"}
             </p>
-            <div className="w-16 md:w-20 h-1 bg-blue-500 mx-auto mb-6 md:mb-10"></div>
-            
-            <a 
-              href="#quick-nav" 
-              className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-300"
-              aria-label="Explore our story"
-            >
-              <ChevronDown size={28} className="text-blue-300" />
-            </a>
-          </div>
-        </div>
-      </section>
-      
-      {/* Mobile-optimized Quick Navigation */}
-      <div 
-        id="quick-nav" 
-        className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm"
-      >
-        <div className="container mx-auto px-4">
-          <div className="flex overflow-x-auto py-3 hide-scrollbar">
-            <a href="#about" className="flex-shrink-0 px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 whitespace-nowrap">About</a>
-            <a href="#services" className="flex-shrink-0 px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 whitespace-nowrap">Services</a>
-            <a href="#team" className="flex-shrink-0 px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 whitespace-nowrap">Team</a>
-            <a href="#goals" className="flex-shrink-0 px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 whitespace-nowrap">Goals</a>
-            <a href="#contact" className="flex-shrink-0 px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-600 whitespace-nowrap">Contact</a>
           </div>
         </div>
       </div>
       
-      {/* About Section - Interactive tabs on mobile */}
-      <section 
-        id="about" 
-        ref={el => sectionRefs.current.about = el}
-        className="py-10 md:py-16 lg:py-24 bg-gray-50"
+      {/* Filter Bar - Mobile drawer and desktop inline */}
+      <div 
+        ref={filterRef}
+        className={`py-3 md:py-4 border-b transition-all duration-300 ${
+          isFilterSticky 
+            ? 'sticky top-0 z-30 bg-white shadow-sm' 
+            : 'bg-white'
+        }`}
       >
         <div className="container mx-auto px-4 md:px-6">
-          <div className={`text-center mb-8 md:mb-12 transition-all duration-700 ${getFadeClass('about')}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              About <span className="text-blue-600">Ace Concepts</span>
-            </h2>
-          </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-            {/* Mobile-specific tabs interface */}
-            {isMobile ? (
-              <div className="space-y-6">
-                {/* Brief mobile summary */}
-                <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                  <p className="text-gray-700 text-base leading-relaxed">
-                    Since {companyInfo.founded}, Ace Concepts Ventures has become a leading innovator in high-quality branding and fabricated illuminated signage in Nigeria, transforming ordinary spaces into extraordinary experiences.
-                  </p>
+          {isMobile ? (
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold text-gray-900">
+                {filters.find(f => f.id === activeFilter)?.name || 'All Projects'}
+              </h2>
+              <button 
+                onClick={() => setIsFilterOpen(true)}
+                className="flex items-center px-4 py-2 rounded-md bg-gray-100 text-gray-800 text-base font-medium"
+              >
+                <Filter size={18} className="mr-2" />
+                Filter
+              </button>
+              
+              {/* Mobile filter drawer */}
+              <div className={`fixed inset-0 bg-black/50 z-50 transition-opacity duration-300 ${isFilterOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                <div className={`absolute right-0 top-0 bottom-0 w-72 bg-white shadow-lg transform transition-transform duration-300 ${isFilterOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                  <div className="p-4 border-b">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-semibold text-gray-900">Filter Projects</h3>
+                      <button 
+                        onClick={() => setIsFilterOpen(false)}
+                        className="p-1 rounded-full hover:bg-gray-100"
+                      >
+                        <X size={22} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex flex-col space-y-2">
+                      {filters.map(filter => (
+                        <button
+                          key={filter.id}
+                          onClick={() => handleFilterChange(filter.id)}
+                          className={`px-4 py-3 rounded-md text-base font-medium transition-all text-left ${
+                            activeFilter === filter.id
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                          }`}
+                        >
+                          {filter.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex items-center mb-4 md:mb-0">
+                <Filter size={20} className="mr-2 text-blue-600" />
+                <h2 className="text-xl font-semibold text-gray-900">Filter Projects</h2>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 justify-center">
+                {filters.map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => handleFilterChange(filter.id)}
+                    className={`px-4 py-2 rounded-md text-base font-medium transition-all ${
+                      activeFilter === filter.id
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                    }`}
+                    aria-pressed={activeFilter === filter.id}
+                  >
+                    {filter.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      {/* Featured Projects - Carousel on mobile/tablet, grid on desktop */}
+      {featuredProjects.length > 0 && (
+        <section className="py-8 md:py-12 lg:py-16">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="flex items-center mb-6 md:mb-8">
+              <Star size={isMobile ? 20 : 22} className="mr-2 md:mr-3 text-blue-600" />
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                Featured Projects
+              </h2>
+            </div>
+            
+            {(isMobile || isTablet) ? (
+              <div className="relative" ref={featuredCarouselRef}>
+                <div className="overflow-hidden rounded-lg">
+                  <div 
+                    className="flex transition-transform duration-500 ease-out"
+                    style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+                  >
+                    {featuredProjects.map((project, index) => (
+                      <div key={project.id} className="w-full flex-shrink-0">
+                        <div className="relative aspect-video overflow-hidden rounded-lg">
+                          <img 
+                            src={project.image} 
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                          
+                          <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
+                            <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-2 bg-blue-600 text-white">
+                              {filters.find(filter => filter.id === project.category)?.name}
+                            </span>
+                            <h3 className="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
+                            <p className="text-base md:text-lg text-gray-200 mb-3 line-clamp-2 opacity-90">
+                              {project.description}
+                            </p>
+                            
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm md:text-base text-gray-300">{project.client}</span>
+                              <button 
+                                onClick={() => isMobile ? openProjectModal(project) : window.location.href = `/projects/${project.id}`}
+                                className="flex items-center text-base md:text-lg text-white font-medium"
+                              >
+                                <span>View Project</span>
+                                <ArrowRight size={18} className="ml-2" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 
-                {/* Tab navigation */}
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                  <div className="flex overflow-x-auto hide-scrollbar border-b border-gray-200">
-                    <button 
-                      className={`px-4 py-3 text-base font-medium whitespace-nowrap ${activeTab === 'purpose' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-                      onClick={() => setActiveTab('purpose')}
-                    >
-                      Purpose
-                    </button>
-                    <button 
-                      className={`px-4 py-3 text-base font-medium whitespace-nowrap ${activeTab === 'vision' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-                      onClick={() => setActiveTab('vision')}
-                    >
-                      Vision
-                    </button>
-                    <button 
-                      className={`px-4 py-3 text-base font-medium whitespace-nowrap ${activeTab === 'mission' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-                      onClick={() => setActiveTab('mission')}
-                    >
-                      Mission
-                    </button>
-                    <button 
-                      className={`px-4 py-3 text-base font-medium whitespace-nowrap ${activeTab === 'values' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-700 hover:text-blue-600'}`}
-                      onClick={() => setActiveTab('values')}
-                    >
-                      Values
-                    </button>
+                {/* Carousel controls */}
+                <div className="flex justify-between items-center mt-4">
+                  <div className="flex space-x-2 items-center">
+                    {featuredProjects.map((_, index) => (
+                      <button 
+                        key={index} 
+                        className={`w-3 h-3 rounded-full ${activeSlide === index ? 'bg-blue-600' : 'bg-gray-300'}`}
+                        onClick={() => setActiveSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
+                      ></button>
+                    ))}
                   </div>
                   
-                  <div className="p-5">
-                    {activeTab === 'purpose' && (
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0 p-2 rounded-full bg-blue-100 mt-0.5">
-                          <Target size={18} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-lg text-gray-900 mb-2">Our Purpose</h3>
-                          <p className="text-base text-gray-700">{companyInfo.purpose}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {activeTab === 'vision' && (
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0 p-2 rounded-full bg-blue-100 mt-0.5">
-                          <Star size={18} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-lg text-gray-900 mb-2">Our Vision</h3>
-                          <p className="text-base text-gray-700">{companyInfo.vision}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {activeTab === 'mission' && (
-                      <div className="flex items-start space-x-3">
-                        <div className="flex-shrink-0 p-2 rounded-full bg-blue-100 mt-0.5">
-                          <Award size={18} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-lg text-gray-900 mb-2">Our Mission</h3>
-                          <p className="text-base text-gray-700">{companyInfo.mission}</p>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {activeTab === 'values' && (
-                      <div>
-                        <h3 className="font-medium text-lg text-gray-900 mb-3">Core Values</h3>
-                        <ul className="space-y-3">
-                          <li className="flex items-start space-x-3">
-                            <div className="p-2 rounded-full bg-blue-100 flex-shrink-0 mt-0.5">
-                              <Users size={16} className="text-blue-600" />
-                            </div>
-                            <span className="text-base text-gray-700">Treating our customers with respect and faith</span>
-                          </li>
-                          <li className="flex items-start space-x-3">
-                            <div className="p-2 rounded-full bg-blue-100 flex-shrink-0 mt-0.5">
-                              <Shield size={16} className="text-blue-600" />
-                            </div>
-                            <span className="text-base text-gray-700">Honesty, integrity and business ethics in all aspects</span>
-                          </li>
-                          <li className="flex items-start space-x-3">
-                            <div className="p-2 rounded-full bg-blue-100 flex-shrink-0 mt-0.5">
-                              <Clock size={16} className="text-blue-600" />
-                            </div>
-                            <span className="text-base text-gray-700">Growth through creativity, invention and innovation</span>
-                          </li>
-                        </ul>
-                      </div>
-                    )}
+                  <div className="flex space-x-3">
+                    <button 
+                      onClick={prevSlide}
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button 
+                      onClick={nextSlide}
+                      className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
                   </div>
                 </div>
               </div>
             ) : (
-              // Desktop layout
-              <>
-                <div className={`transition-all duration-700 ${getFadeClass('about')}`}>                    
-                  <div className="space-y-6 text-gray-700">
-                    <p className="text-lg leading-relaxed">
-                      Since its founding in {companyInfo.founded}, Ace Concepts Ventures has become a leading innovator and supplier of high-quality tailor-made branding and fabricated illuminated signage and media wall in Nigeria.
-                    </p>
-                    <p className="text-lg leading-relaxed">
-                      We specialize in transforming ordinary spaces into extraordinary experiences with custom-built LED displays, laser-cut signage, and red carpet media branding for indoor and outdoor events that leave lasting impressions.
-                    </p>
+              <div className="grid grid-cols-3 gap-6 md:gap-8">
+                {featuredProjects.map(project => (
+                  <div 
+                    key={project.id}
+                    className="group relative rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl"
+                  >
+                    <div className="aspect-video overflow-hidden bg-gray-100">
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    </div>
                     
-                    <div className="mt-10 space-y-8">
-                      <div className="flex items-start space-x-4">
-                        <div className="flex-shrink-0 p-2 rounded-full bg-blue-100">
-                          <Target size={22} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-xl mb-2 text-gray-900">Our Purpose</h3>
-                          <p className="text-lg text-gray-700">{companyInfo.purpose}</p>
-                        </div>
-                      </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-3 bg-blue-600 text-white">
+                        {filters.find(filter => filter.id === project.category)?.name}
+                      </span>
+                      <h3 className="text-2xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
+                      <p className="text-base text-gray-200 mb-4 opacity-90">
+                        {project.description}
+                      </p>
                       
-                      <div className="flex items-start space-x-4">
-                        <div className="flex-shrink-0 p-2 rounded-full bg-blue-100">
-                          <Star size={22} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-xl mb-2 text-gray-900">Our Vision</h3>
-                          <p className="text-lg text-gray-700">{companyInfo.vision}</p>
-                        </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-base text-gray-300">{project.client}</span>
+                        <a href={`/projects/${project.id}`} className="flex items-center text-base text-white font-medium group">
+                          <span>View Project</span>
+                          <ArrowRight size={18} className="ml-2 transition-transform group-hover:translate-x-1" />
+                        </a>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className={`bg-white p-8 rounded-lg shadow-sm border border-gray-200 transition-all duration-700 delay-200 ${getFadeClass('about')}`}>
-                  <div className="relative mb-6">
-                    <h3 className="text-2xl font-bold mb-4 text-gray-900 inline-flex items-center">
-                      <Award size={24} className="text-blue-600 mr-2" />
-                      Our Mission
-                    </h3>
-                  </div>
-                  
-                  <p className="mb-8 text-lg text-gray-700 leading-relaxed">
-                    {companyInfo.mission}
-                  </p>
-                  
-                  <div>
-                    <h3 className="text-xl font-bold mb-4 text-gray-900">Core Values</h3>
-                    <ul className="space-y-4">
-                      <li className="flex items-center space-x-3">
-                        <div className="p-2 rounded-full bg-blue-100">
-                          <Users size={18} className="text-blue-600" />
-                        </div>
-                        <span className="text-lg text-gray-700">Treating our customers with respect and faith</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="p-2 rounded-full bg-blue-100">
-                          <Shield size={18} className="text-blue-600" />
-                        </div>
-                        <span className="text-lg text-gray-700">Honesty, integrity and business ethics in all aspects</span>
-                      </li>
-                      <li className="flex items-center space-x-3">
-                        <div className="p-2 rounded-full bg-blue-100">
-                          <Clock size={18} className="text-blue-600" />
-                        </div>
-                        <span className="text-lg text-gray-700">Growth through creativity, invention and innovation</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </>
+                ))}
+              </div>
             )}
           </div>
-        </div>
-      </section>
+        </section>
+      )}
       
-      {/* Services Section - Carousel on mobile */}
-      <section 
-        id="services" 
-        ref={el => sectionRefs.current.services = el}
-        className="py-10 md:py-16 lg:py-24 bg-white"
-      >
+      {/* Main Portfolio Grid - Adaptive layout for different screen sizes */}
+      <section className="py-8 md:py-12 lg:py-16 bg-gray-50">
         <div className="container mx-auto px-4 md:px-6">
-          <div className={`text-center mb-8 md:mb-12 transition-all duration-700 ${getFadeClass('services')}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              What We <span className="text-blue-600">Do</span>
-            </h2>
-            {!isMobile && (
-              <p className="max-w-2xl mx-auto text-lg text-gray-600 mt-3">
-                Ace Concepts Ventures provides professional media branding for events and fabricates all types of props and signage for indoor and outdoor events and activations.
-              </p>
-            )}
-          </div>
-        
-        {isMobile ? (
-            <div>
-                <div className="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
-                <div className="relative">
-                    <div className="overflow-hidden">
-                    <div 
-                        className="flex transition-transform duration-300 ease-out"
-                        style={{ transform: `translateX(-${activeServiceIndex * 100}%)` }}
-                    >
-                        {services.map((service, index) => (
-                        <div key={index} className="w-full flex-shrink-0 p-5">
-                            <div className="flex flex-col items-center text-center">
-                            <div className="w-14 h-14 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
-                                <svg 
-                                xmlns="http://www.w3.org/2000/svg" 
-                                width="24" 
-                                height="24" 
-                                viewBox="0 0 24 24" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                strokeWidth="2" 
-                                strokeLinecap="round" 
-                                strokeLinejoin="round" 
-                                className="text-blue-600"
-                                >
-                                {service.icon === "activity" && <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>}
-                                {service.icon === "star" && <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>}
-                                {service.icon === "file" && (
-                        <>
-                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                        </>
+          <div className={`grid grid-cols-1 ${isTablet ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'} gap-4 md:gap-6 lg:gap-8`}>
+            {filteredProjects.slice(0, visibleItems).map((project, index) => (
+              <div 
+                key={project.id}
+                className={`transition-all duration-500 transform ${
+                  isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${index * 50}ms` }}
+              >
+                <div 
+                  className={`h-full rounded-lg overflow-hidden bg-white border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 ${isMobile ? 'active:scale-98' : ''}`}
+                  onClick={() => isMobile ? openProjectModal(project) : null}
+                >
+                  <div className="relative overflow-hidden bg-gray-100">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full aspect-video object-cover transition-transform duration-500 hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-3 right-3">
+                      {project.featured && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium bg-blue-600 text-white">
+                          <Star size={14} className="mr-1" />
+                          Featured
+                        </span>
                       )}
-                      {service.icon === "monitor" && (
-                        <>
-                          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                          <line x1="8" y1="21" x2="16" y2="21"/>
-                          <line x1="12" y1="17" x2="12" y2="21"/>
-                        </>
-                      )}
-                      {service.icon === "book-open" && (
-                        <>
-                          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                        </>
-                      )}
-                      {service.icon === "help-circle" && (
-                        <>
-                          <circle cx="12" cy="12" r="10"/>
-                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                          <line x1="12" y1="17" x2="12.01" y2="17"/>
-                        </>
-                      )}
-                    </svg>
+                    </div>
                   </div>
                   
-                  <h3 className="text-lg font-medium mb-3 text-gray-900">{service.title}</h3>
-                  <p className="text-base text-gray-600">{service.description}</p>
+                  <div className="p-4 md:p-6">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 leading-tight">{project.title}</h3>
+                      <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{project.year}</span>
+                    </div>
+                    
+                    <p className="text-base md:text-lg text-gray-600 mb-3 md:mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-3 md:mb-4">
+                      {project.tags.slice(0, isMobile ? 2 : 3).map((tag, i) => (
+                        <span 
+                          key={i} 
+                          className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      {project.tags.length > (isMobile ? 2 : 3) && (
+                        <span className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700">
+                          +{project.tags.length - (isMobile ? 2 : 3)}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div className="pt-3 md:pt-4 mt-1 md:mt-2 border-t border-gray-100 flex justify-between items-center">
+                      <span className="text-sm text-gray-500">Client: <span className="font-medium text-gray-900">{project.client}</span></span>
+                      {!isMobile && (
+                        <a 
+                          href={`/projects/${project.id}`}
+                          className="flex items-center text-base md:text-lg font-medium text-blue-600 hover:text-blue-700"
+                        >
+                          <span>Details</span>
+                          <ExternalLink size={isMobile ? 16 : 18} className="ml-1" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-        
-        {/* Carousel controls */}
-        <button 
-          onClick={prevService}
-          className="absolute left-1 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-700"
-          aria-label="Previous service"
-        >
-          <ChevronLeft size={20} />
-        </button>
-        
-        <button 
-          onClick={nextService}
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm text-gray-700"
-          aria-label="Next service"
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
-      
-      {/* Carousel indicators */}
-      <div className="py-3 px-4 border-t border-gray-200">
-        <div className="flex justify-center space-x-2">
-          {services.map((_, index) => (
-            <button 
-              key={index}
-              onClick={() => setActiveServiceIndex(index)}
-              className={`w-3 h-3 rounded-full ${index === activeServiceIndex ? 'bg-blue-600' : 'bg-gray-300'}`}
-              aria-label={`Go to service ${index + 1}`}
-            ></button>
-          ))}
-        </div>
-      </div>
-    </div>
-    
-    {/* Simple service list for quick access */}
-    <div className="grid grid-cols-2 gap-2">
-      {services.map((service, index) => (
-        <button
-          key={index}
-          onClick={() => setActiveServiceIndex(index)}
-          className={`p-3 rounded-lg border ${
-            index === activeServiceIndex 
-              ? 'border-blue-200 bg-blue-50 text-blue-700' 
-              : 'border-gray-200 bg-white text-gray-700'
-          } text-sm font-medium text-center`}
-        >
-          {service.title}
-        </button>
-      ))}
-    </div>
-  </div>
-) : (
-  // Desktop layout for services
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-    {services.map((service, index) => (
-      <div 
-        key={index}
-        className={`bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all duration-300 ${getFadeClass('services')}`}
-        style={{ transitionDelay: `${(index % 3) * 100 + 200}ms` }}
-      >
-        <div className="w-14 h-14 rounded-lg bg-blue-100 flex items-center justify-center mb-4">
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="22" 
-            height="22" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            className="text-blue-600"
-          >
-            {service.icon === "activity" && <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>}
-            {service.icon === "star" && <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>}
-            {service.icon === "file" && (
-              <>
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </>
-            )}
-            {service.icon === "monitor" && (
-              <>
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
-              </>
-            )}
-            {service.icon === "book-open" && (
-              <>
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-              </>
-            )}
-            {service.icon === "help-circle" && (
-              <>
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </>
-            )}
-          </svg>
-        </div>
-        
-        <h3 className="text-xl font-semibold mb-3 text-gray-900">{service.title}</h3>
-        <p className="text-lg text-gray-600">{service.description}</p>
-      </div>
-    ))}
-  </div>
-)}
-        </div>
-      </section>
-      
-      {/* Team Section - Cards with flip effect on mobile */}
-      <section 
-        id="team" 
-        ref={el => sectionRefs.current.team = el}
-        className="py-10 md:py-16 lg:py-24 bg-gray-50"
-      >
-        <div className="container mx-auto px-4 md:px-6">
-          <div className={`text-center mb-8 md:mb-12 transition-all duration-700 ${getFadeClass('team')}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Our <span className="text-blue-600">Team</span>
-            </h2>
-            {!isMobile && (
-              <p className="max-w-2xl mx-auto text-lg text-gray-600 mt-3">
-                Meet the professionals behind Ace Concepts Ventures who bring creativity and excellence to every project.
-              </p>
-            )}
-          </div>
           
-          {/* Mobile team slider with swipeable cards */}
-          {isMobile ? (
-            <div className="overflow-x-auto py-4 hide-scrollbar">
-              <div className="flex space-x-4 px-2 min-w-max">
-                {teamMembers.map((member, index) => (
-                  <div 
-                    key={index}
-                    className="w-72 h-64 perspective-1000"
-                  >
-                    <div 
-                      className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d rounded-lg border border-gray-200 ${
-                        expandedSections[`team-card-${index}`] ? 'rotate-y-180' : ''
-                      }`}
-                      onClick={() => toggleSection(`team-card-${index}`)}
-                    >
-                      {/* Card Front */}
-                      <div className="absolute inset-0 bg-white rounded-lg p-5 flex flex-col items-center justify-center text-center backface-hidden z-10">
-                        <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-                          <Users size={26} className="text-blue-600" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3">{member.role}</h3>
-                        <p className="text-sm text-gray-500 mt-auto">Tap to learn more</p>
-                      </div>
-                      
-                      {/* Card Back */}
-                      <div className="absolute inset-0 bg-blue-600 text-white rounded-lg p-5 flex flex-col backface-hidden rotate-y-180">
-                        <h3 className="text-xl font-semibold mb-3">{member.role}</h3>
-                        <p className="text-base flex-grow">{member.description}</p>
-                        <p className="text-sm mt-3 italic">Tap to flip back</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-4 text-center">
-                <p className="inline-block bg-blue-50 px-4 py-3 rounded-md text-base text-gray-700">
-                  Led by <span className="font-semibold text-gray-900">{companyInfo.director}</span>
-                </p>
-              </div>
+          {/* Load More Button - Adaptive size */}
+          {visibleItems < filteredProjects.length && (
+            <div className="mt-8 md:mt-12 text-center">
+              <button 
+                onClick={loadMore}
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center mx-auto text-base md:text-lg"
+              >
+                <span>{isMobile ? "Load More" : "Load More Projects"}</span>
+                <Plus size={isMobile ? 18 : 20} className="ml-2" />
+              </button>
             </div>
-          ) : (
-            // Desktop layout
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                {teamMembers.map((member, index) => (
-                  <div 
-                    key={index}
-                    className={`bg-white rounded-lg p-6 border border-gray-200 hover:border-blue-200 hover:shadow-md transition-all duration-300 ${getFadeClass('team')}`}
-                    style={{ transitionDelay: `${index * 100 + 200}ms` }}
-                  >
-                    <div className="flex items-center mb-4">
-                      <div className="p-2 rounded-full bg-blue-100 mr-3">
-                        <Users size={22} className="text-blue-600" />
-                      </div>
-                      <h3 className="text-xl font-semibold text-gray-900">{member.role}</h3>
-                    </div>
-                    <p className="text-lg text-gray-600 ml-11">{member.description}</p>
-                  </div>
-                ))}
-              </div>
-              
-              <div className={`mt-10 text-center transition-all duration-700 delay-700 ${getFadeClass('team')}`}>
-                <p className="inline-block bg-blue-50 px-5 py-4 rounded-lg text-lg text-gray-700">
-                  Led by <span className="font-semibold text-gray-900">{companyInfo.director}</span>, our team works collaboratively to deliver outstanding results.
-                </p>
-              </div>
-            </>
           )}
         </div>
       </section>
       
-      {/* Goals Section - Interactive timeline on mobile */}
-      <section 
-        id="goals" 
-        ref={el => sectionRefs.current.goals = el}
-        className="py-10 md:py-16 lg:py-24 bg-white"
-      >
+      {/* Stats Section - Swipeable cards on mobile */}
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 md:px-6">
-          <div className={`text-center mb-8 md:mb-12 transition-all duration-700 ${getFadeClass('goals')}`}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-              Our <span className="text-blue-600">Goals</span>
+          <div className="text-center mb-6 md:mb-10">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 text-gray-900">
+              Our Impact in Numbers
             </h2>
+            <p className="max-w-2xl mx-auto text-base md:text-lg text-gray-600">
+              Since 2008, we've been creating exceptional experiences for brands across Nigeria
+            </p>
           </div>
           
-          <div className="max-w-3xl mx-auto">
-            {/* Mobile goals timeline */}
-            {isMobile ? (
-              <div className="relative pl-10 border-l-2 border-blue-200 space-y-8 mb-8">
-                {goals.map((goal, index) => (
-                  <div 
-                    key={index}
-                    className="relative"
-                  >
-                    <span className="absolute -left-[30px] flex items-center justify-center w-14 h-14 rounded-full bg-blue-100 border-4 border-white">
-                      <span className="text-blue-600 font-bold text-lg">{index + 1}</span>
-                    </span>
-                    <div className="bg-white p-5 rounded-lg shadow-sm ml-2">
-                      <p className="text-base text-gray-700">{goal}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              // Desktop version
-              <div className="space-y-12 mb-12">
-                {goals.map((goal, index) => (
-                  <div 
-                    key={index}
-                    className={`relative pl-12 transition-all duration-700 ${getFadeClass('goals')}`}
-                    style={{ transitionDelay: `${index * 150 + 200}ms` }}
-                  >
-                    <div className="absolute left-0 top-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white">
-                      <span className="text-sm font-bold">{index + 1}</span>
-                    </div>
-                    <p className="text-xl text-gray-700">{goal}</p>
-                    {index < goals.length - 1 && (
-                      <div className="absolute left-4 top-8 bottom-0 w-px bg-blue-200 -mb-12"></div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            {/* Contact Information - With interactive map link on mobile */}
-            <div 
-              id="contact"
-              className={`p-5 md:p-6 bg-blue-50 rounded-lg border border-blue-100 transition-all duration-700 ${isMobile ? '' : `delay-700 ${getFadeClass('goals')}`}`}
-            >
-              <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-900 flex items-center">
-                <MapPin size={isMobile ? 18 : 20} className="mr-2 text-blue-600" />
-                Contact Information
-              </h3>
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <div>
-                  <p className="text-base md:text-lg mb-2 md:mb-2 text-gray-700">Lagos, Nigeria</p>
-                  <p className="text-sm md:text-base text-gray-600">
-                    Main contact: <span className="font-semibold text-gray-900">{companyInfo.director}</span>
-                  </p>
+          {isMobile ? (
+            <div className="overflow-x-auto hide-scrollbar pb-4">
+              <div className="flex space-x-4 px-2 min-w-max">
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">500+</div>
+                  <p className="text-sm text-gray-600">Projects Completed</p>
                 </div>
                 
-                {isMobile && (
-                  <a 
-                    href="https://maps.google.com/?q=Lagos,Nigeria" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center justify-center px-5 py-3 bg-blue-600 text-white text-base font-medium rounded-md hover:bg-blue-700 transition-colors"
-                  >
-                    <MapPin size={16} className="mr-2" />
-                    View Map
-                  </a>
-                )}
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">15+</div>
+                  <p className="text-sm text-gray-600">Years Experience</p>
+                </div>
+                
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">200+</div>
+                  <p className="text-sm text-gray-600">Satisfied Clients</p>
+                </div>
+                
+                <div className="w-40 p-4 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                  <div className="text-3xl font-bold mb-1 text-blue-600">12</div>
+                  <p className="text-sm text-gray-600">Industry Awards</p>
+                </div>
               </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">500+</div>
+                <p className="text-base text-gray-600">Projects Completed</p>
+              </div>
+              
+              <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">15+</div>
+                <p className="text-base text-gray-600">Years Experience</p>
+              </div>
+              
+              <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">200+</div>
+                <p className="text-base text-gray-600">Satisfied Clients</p>
+              </div>
+              
+              <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">12</div>
+                <p className="text-base text-gray-600">Industry Awards</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+      
+      {/* Call to Action - Simplified for mobile */}
+      <section className="py-8 md:py-12 lg:py-16 bg-blue-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 md:mb-4 text-gray-900">
+              Ready to Transform Your Next Event?
+            </h2>
+            <p className="text-base md:text-lg lg:text-xl text-gray-700 mb-6 md:mb-8">
+              Let's collaborate to create a memorable branded experience that leaves a lasting impression.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4">
+              <a 
+                href="/contact" 
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md text-base md:text-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 flex items-center justify-center"
+              >
+                <span>Request a Quote</span>
+                <ArrowRight size={isMobile ? 18 : 20} className="ml-2" />
+              </a>
+              
+              <a 
+                href="/projects" 
+                className="px-6 md:px-8 py-3 md:py-4 rounded-md text-base md:text-lg font-medium bg-white border border-gray-300 text-gray-800 hover:bg-gray-50 transition-all duration-300 justify-center"
+              >
+                View All Projects
+              </a>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Back to top button - Only visible after scrolling down */}
-      {showBackToTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-4 right-4 z-50 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
-          aria-label="Back to top"
-        >
-          <ChevronUp size={24} />
-        </button>
+      {/* Mobile Project Modal */}
+      {isMobile && isProjectModalOpen && selectedProject && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 flex items-center justify-center" onClick={closeProjectModal}>
+          <div 
+            className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-auto m-4" 
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="relative">
+              <img 
+                src={selectedProject.image} 
+                alt={selectedProject.title}
+                className="w-full aspect-video object-cover"
+              />
+              <button 
+                onClick={closeProjectModal}
+                className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-white"
+              >
+                <X size={20} />
+              </button>
+              {selectedProject.featured && (
+                <div className="absolute top-2 left-2">
+                  <span className="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium bg-blue-600 text-white">
+                    <Star size={14} className="mr-1" />
+                    Featured
+                  </span>
+                </div>
+              )}
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                <span className="inline-block px-3 py-1 text-sm font-semibold rounded-full mb-2 bg-blue-600 text-white">
+                  {filters.find(filter => filter.id === selectedProject.category)?.name}
+                </span>
+              </div>
+            </div>
+            
+            <div className="p-4">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-xl font-bold text-gray-900">{selectedProject.title}</h3>
+                <span className="text-sm font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">{selectedProject.year}</span>
+              </div>
+              
+              <p className="text-base text-gray-700 mb-4">
+                {selectedProject.description}
+              </p>
+              
+              <h4 className="text-base font-medium text-gray-900 mb-2">Tags:</h4>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {selectedProject.tags.map((tag, i) => (
+                  <span 
+                    key={i} 
+                    className="inline-block px-2 py-1 text-sm rounded bg-gray-100 text-gray-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              <div className="pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h4 className="text-base font-medium text-gray-900">Client:</h4>
+                    <p className="text-base text-gray-700">{selectedProject.client}</p>
+                  </div>
+                  <a 
+                    href={`/projects/${selectedProject.id}`}
+                    className="flex items-center text-base font-medium text-blue-600 bg-blue-50 px-4 py-2 rounded-md"
+                  >
+                    <span>View Full Project</span>
+                    <ArrowRight size={16} className="ml-2" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
       
       {/* Utility styles */}
@@ -845,45 +771,12 @@ const AboutUs = () => {
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }
-        
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-        
-        .transform-style-preserve-3d {
-          transform-style: preserve-3d;
-        }
-        
-        .backface-hidden {
-          backface-visibility: hidden;
-        }
-        
-        .rotate-y-180 {
-          transform: rotateY(180deg);
+        .active:scale-98 {
+          transform: scale(0.98);
         }
       `}</style>
     </div>
   );
 };
 
-// Missing ChevronUp component import
-const ChevronUp = ({ size, className }) => {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-  );
-};
-
-export default AboutUs; 
+export default Portfolio;

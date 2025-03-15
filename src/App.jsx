@@ -9,6 +9,10 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/Home";
 import AboutPage from "./pages/About";
 import PortfolioPage from "./pages/Portfolio";
+import RedCarpetPage from "./pages/Services/RedCarprt";
+import FabricationPage from "./pages/Services/Fabrication";
+import LedInstallationsPage from "./pages/Services/Led";
+import SignagePage from "./pages/Services/Sign";
 
 function App() {
   return (
@@ -21,6 +25,14 @@ function App() {
             <Route exact path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
+
+              {/* Service-specific pages */}
+            <Route path="/services/red-carpet" element={<RedCarpetPage />} />
+            <Route path="/services/fabrication" element={<FabricationPage />} />
+            <Route path="/services/led" element={<LedInstallationsPage />} />
+            <Route path="/services/signage" element={<SignagePage />} />
+
+          
            
             {/* 404 page - this should always be last */}
             <Route path="*" element={

@@ -669,6 +669,7 @@ const AboutUs = () => {
           
           {/* Mobile team slider with swipeable cards */}
           {isMobile ? (
+            <div>
             <div className="overflow-x-auto py-4 hide-scrollbar">
               <div className="flex space-x-4 px-2 min-w-max">
                 {teamMembers.map((member, index) => (
@@ -701,13 +702,14 @@ const AboutUs = () => {
                   </div>
                 ))}
               </div>
-              
-              <div className="mt-4 text-center">
+            </div>
+            <div className="mt-4 text-center">
                 <p className="inline-block bg-blue-50 px-4 py-3 rounded-md text-base text-gray-700">
                   Led by <span className="font-semibold text-gray-900">{companyInfo.director}</span>
                 </p>
               </div>
             </div>
+            
           ) : (
             // Desktop layout
             <>

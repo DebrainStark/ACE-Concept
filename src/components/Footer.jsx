@@ -11,9 +11,13 @@ import {
   ChevronRight,
   Camera,
   Monitor,
-  Scissors
+  Scissors,
+  AlertCircle,
+  Check
 } from "react-feather";
 import logo from "../assets/ACEicon.png"; // Import your logo image
+import { subscribeToNewsletter, mockSubscribeToNewsletter } from "../services/newsletterService";
+import config from "../config/environment";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -23,14 +27,86 @@ const Footer = () => {
     message: "",
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  
+  // Newsletter states
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newsletterStatus, setNewsletterStatus] = useState({
+    submitted: false,
+    success: false,
+    message: ""
+  });
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
-    // Handle newsletter submission
-    setNewsletterSubmitted(true);
-    setTimeout(() => setNewsletterSubmitted(false), 3000);
-    setEmail("");
+    
+    // Basic validation
+    if (!email) {
+      setNewsletterStatus({
+        submitted: true,
+        success: false,
+        message: "Please enter your email address"
+      });
+      return;
+    }
+    
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setNewsletterStatus({
+        submitted: true,
+        success: false,
+        message: "Please enter a valid email address"
+      });
+      return;
+    }
+    
+    // Show loading state
+    setIsSubmitting(true);
+    
+    try {
+      // Choose between real API and mock based on environment
+      const result = config.usesMockData 
+        ? await mockSubscribeToNewsletter(email)
+        : await subscribeToNewsletter(email);
+      
+      if (result.success) {
+        // Success case
+        setNewsletterStatus({
+          submitted: true,
+          success: true,
+          message: result.message || "Thank you for subscribing!"
+        });
+        
+        // Clear email field on success
+        setEmail("");
+      } else {
+        // Error case
+        setNewsletterStatus({
+          submitted: true,
+          success: false,
+          message: result.message || "Failed to subscribe. Please try again."
+        });
+      }
+    } catch (error) {
+      // Unexpected error
+      console.error("Newsletter subscription error:", error);
+      setNewsletterStatus({
+        submitted: true,
+        success: false,
+        message: "An unexpected error occurred. Please try again later."
+      });
+    } finally {
+      // Hide loading state
+      setIsSubmitting(false);
+      
+      // Reset the status message after 5 seconds
+      setTimeout(() => {
+        setNewsletterStatus({
+          ...newsletterStatus,
+          submitted: false
+        });
+      }, 5000);
+    }
   };
 
   const handleContactSubmit = (e) => {
@@ -42,6 +118,7 @@ const Footer = () => {
   };
 
   const currentYear = new Date().getFullYear();
+
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-gray-300 relative overflow-hidden">
@@ -177,21 +254,51 @@ const Footer = () => {
                   <input
                     type="email"
                     placeholder="Enter your email"
-                    className="bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={`bg-gray-800/50 border rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      newsletterStatus.submitted && !newsletterStatus.success 
+                        ? 'border-red-500' 
+                        : 'border-gray-700'
+                    }`}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={isSubmitting}
                     required
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                  className={`w-full text-white px-4 py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                    isSubmitting 
+                      ? 'bg-blue-800 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  }`}
+                  disabled={isSubmitting}
                 >
-                  <span>Subscribe</span>
-                  <Send size={16} />
+                  {isSubmitting ? (
+                    <>
+                      <span>Subscribing...</span>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+                    </>
+                  ) : (
+                    <>
+                      <span>Subscribe</span>
+                      <Send size={16} />
+                    </>
+                  )}
                 </button>
-                {newsletterSubmitted && (
-                  <p className="text-green-400 text-sm mt-2">Thank you for subscribing!</p>
+                
+                {/* Status messages */}
+                {newsletterStatus.submitted && (
+                  <div className={`flex items-center space-x-2 text-sm ${
+                    newsletterStatus.success ? 'text-green-400' : 'text-red-400'
+                  }`}>
+                    {newsletterStatus.success ? (
+                      <Check size={16} />
+                    ) : (
+                      <AlertCircle size={16} />
+                    )}
+                    <p>{newsletterStatus.message}</p>
+                  </div>
                 )}
               </form>
             </div>

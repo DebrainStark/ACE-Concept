@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronRight, ArrowRight, ChevronLeft, Play, Pause } from "lucide-react";
 import heroBg1 from "../assets/event setup1.jpg";
-import heroBg2 from "../assets/stagefabrication.jpg";
-import heroBg3 from "../assets/event production2.jpg";
-import heroBg4 from "../assets/event production1.jpg";
+import heroBg2 from "/Hero1.png";
+import heroBg3 from "/Hero2.png";
+import heroBg4 from "/Hero3.png";
 
 const Hero = () => {
   // Enhanced with descriptions based on company details

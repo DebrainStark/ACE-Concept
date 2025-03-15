@@ -46,7 +46,7 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      className={`navv fixed w-full transition-all duration-300 ${
         scrolled ? "shadow-xl bg-white" : "bg-white/95 backdrop-blur-sm"
       }`}
     >
@@ -251,6 +251,11 @@ const Navigation = () => {
           </div>
         </div>
       </div>
+      <style jsx>{`
+          .navv{
+            z-index: 1000;
+          }
+      `}</style>
     </nav>
   );
 };

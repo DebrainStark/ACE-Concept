@@ -832,9 +832,6 @@ const LaserCutSignature = () => {
         </div>
       </section>
       
-      {/* Floating CTA Button */}
-      {renderFloatingCTA()}
-      
       {/* Add mobile-specific styles */}
       <style jsx global>{`
         /* Hide scrollbar for Chrome, Safari and Opera */

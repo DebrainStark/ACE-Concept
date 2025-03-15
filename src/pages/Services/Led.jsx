@@ -801,8 +801,7 @@ const LedInstallation = () => {
         </div>
       </section>
       
-      {/* Floating CTA Button */}
-      {renderFloatingCTA()}
+
       
       {/* Add mobile-specific styles */}
       <style jsx global>{`

@@ -738,9 +738,7 @@ const RedCarpetEvent = () => {
           </div>
         </div>
       </section>
-      
-      {/* Floating CTA Button */}
-      {renderFloatingCTA()}
+    
       
       {/* Add mobile-specific styles */}
       <style jsx global>{`

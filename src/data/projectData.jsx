@@ -1,6 +1,6 @@
 // src/data/projectsData.js
-import EventSetup from "../assets/event setup4.jpg";
-import StageFabrication from "../assets/stagefabrication.jpg";
+import EventSetup from "/Project1.png";
+import StageFabrication from "/Project2.png";
 import EventProduction from "../assets/event production2.jpg";
 
 const projects = [

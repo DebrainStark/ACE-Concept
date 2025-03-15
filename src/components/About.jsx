@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import Aboutusplaceholder from "/Hero4.png";
+import Aboutusplaceholder from "/Team.png";
 import { Camera, Scissors, Monitor, Award, Users, Calendar, Check, Star, Target } from "react-feather";
 
 const AboutUs = ({ aboutUs }) => {

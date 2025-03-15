@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronRight, ArrowRight, ChevronLeft, Play, Pause } from "lucide-react";
-import heroBg1 from "../assets/event setup1.jpg";
+import heroBg1 from "/Hero4.png";
 import heroBg2 from "/Hero1.png";
 import heroBg3 from "/Hero2.png";
 import heroBg4 from "/Hero3.png";

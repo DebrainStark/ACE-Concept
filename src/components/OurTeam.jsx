@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, Users } from 'lucide-react';
-import team from "../assets/team.jpeg";
+import team from "/About.jpg";
 
 const OurTeam = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

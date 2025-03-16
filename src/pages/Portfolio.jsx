@@ -252,9 +252,21 @@ const Portfolio = () => {
 
   return (
     <div className="bg-white text-gray-900 py-16">
-      {/* Clean, professional header */}
-      <div className="relative bg-blue-900 py-16 md:py-20 lg:py-28">
-        <div className="absolute inset-0 opacity-20">
+      {/* Enhanced header with image */}
+      <div className="relative py-16 md:py-20 lg:py-28 overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="Hero2.png" 
+            alt="Portfolio header background" 
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-blue-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-blue-900/90"></div>
+        </div>
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-20 z-10">
           <svg
             width="100%"
             height="100%"
@@ -276,7 +288,8 @@ const Portfolio = () => {
           </svg>
         </div>
         
-        <div className="relative container mx-auto px-4 md:px-6 z-10">
+        {/* Header content */}
+        <div className="relative container mx-auto px-4 md:px-6 z-20">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-white">
               Our Portfolio
@@ -284,6 +297,13 @@ const Portfolio = () => {
             <p className="text-lg md:text-xl lg:text-2xl text-blue-100 max-w-3xl mx-auto">
               {isMobile ? "Showcasing our innovative branded experiences" : "Showcasing innovative branded experiences that elevate our clients' presence"}
             </p>
+            
+            {/* Optional animated indicator */}
+            <div className="mt-8 animate-bounce">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mx-auto text-white opacity-70">
+                <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -631,7 +651,7 @@ const Portfolio = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-              <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
+                 <div className="p-4 md:p-6 rounded-lg bg-white border border-gray-100 text-center shadow-sm">
                 <div className="text-3xl md:text-4xl lg:text-5xl font-bold mb-1 text-blue-600">500+</div>
                 <p className="text-base text-gray-600">Projects Completed</p>
               </div>

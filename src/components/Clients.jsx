@@ -97,6 +97,12 @@ const ClientSection = () => {
   const containerRef = useRef(null);
   const cardsRef = useRef(null);
   
+  // Touch/Drag handling
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  
   // Window resize handler
   useEffect(() => {
     const handleResize = () => {
@@ -120,11 +126,14 @@ const ClientSection = () => {
 
   // Handle automatic rotation
   useEffect(() => {
+    // Only auto-rotate when not being dragged
+    if (isDragging) return;
+    
     const interval = setInterval(() => {
       nextSlide();
     }, 6000);
     return () => clearInterval(interval);
-  }, [activeIndex]);
+  }, [activeIndex, isDragging]);
 
   // Parallax effect for mouse movement - lightweight version
   useEffect(() => {
@@ -173,6 +182,66 @@ const ClientSection = () => {
     setIsAnimating(true);
     setActiveIndex(index);
     setTimeout(() => setIsAnimating(false), 600);
+  };
+
+  // Touch handlers
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setHasInteracted(true);
+    setTouchStart(e.targetTouches[0].clientX);
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isSignificantSwipe = Math.abs(distance) > 50; // Minimum swipe distance
+    
+    if (isSignificantSwipe) {
+      if (distance > 0) {
+        // Swipe left
+        nextSlide();
+      } else {
+        // Swipe right
+        prevSlide();
+      }
+    }
+    
+    // Reset touch values
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+  
+  // Mouse drag handlers
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setHasInteracted(true);
+    setTouchStart(e.clientX);
+    setTouchEnd(e.clientX);
+  };
+  
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    setTouchEnd(e.clientX);
+  };
+  
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    
+    handleTouchEnd();
+  };
+  
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      handleTouchEnd();
+    }
   };
 
   // Get card position styles based on index and active index - more subtle effect
@@ -274,16 +343,35 @@ const ClientSection = () => {
             <ChevronRight size={16} className="group-hover:scale-110 transition-transform" />
           </button>
           
-          {/* Card Carousel */}
+          {/* Card Carousel with swipe functionality */}
           <div 
             ref={cardsRef}
             className="relative h-[360px] sm:h-[320px] md:h-[300px] mx-auto"
             style={{ perspective: '1000px' }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
           >
+            {/* Visual indicator for swipe */}
+            {isDragging && (
+              <div className="absolute top-1/2 left-0 right-0 -translate-y-1/2 z-50 flex justify-between pointer-events-none">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-blue-500/20 rounded-full backdrop-blur-sm">
+                  <ChevronLeft size={18} className="text-white/70" />
+                </div>
+                <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-blue-500/20 rounded-full backdrop-blur-sm">
+                  <ChevronRight size={18} className="text-white/70" />
+                </div>
+              </div>
+            )}
+            
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
-                onClick={() => goToSlide(index)}
+                onClick={() => !isDragging && goToSlide(index)}
                 className={`absolute top-0 left-0 right-0 mx-auto w-[92%] sm:w-[85%] md:w-[80%] max-w-2xl cursor-pointer transition-all duration-600 ease-out`}
                 style={{
                   ...getCardStyle(index),
@@ -350,6 +438,28 @@ const ClientSection = () => {
             ))}
           </div>
           
+          {/* Professional Swipe Instruction */}
+          {(isMobile || isTablet) && !hasInteracted && (
+            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-center pointer-events-none animate-swipeGuide z-50">
+              <div className="bg-black/40 backdrop-blur-sm px-5 py-2.5 rounded-lg shadow-lg border border-white/10">
+                <div className="flex items-center justify-center space-x-3 text-sm text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 8l4 4-4 4"></path>
+                    <path d="M7 8l-4 4 4 4"></path>
+                    <path d="M14 4l-4 16"></path>
+                  </svg>
+                  <span className="font-medium">Swipe to navigate</span>
+                  <div className="w-4 animate-swipeArrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14"></path>
+                      <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           {/* Dots Indicators - simplified */}
           <div className="flex justify-center mt-4 sm:mt-6 space-x-1">
             {testimonials.map((_, index) => (
@@ -385,7 +495,47 @@ const ClientSection = () => {
       {/* CSS Animations */}
       <style jsx>{`
         .duration-600 {
-          transition-duration: 600ms;
+          transition-duration: 1000ms;
+        }
+        
+        @keyframes fadeOut {
+          0% { opacity: 0.7; }
+          70% { opacity: 0.7; }
+          100% { opacity: 0; }
+        }
+        
+        .animate-fadeOut {
+          animation: fadeOut 4s forwards;
+        }
+        
+        @keyframes swipeGuide {
+          0% { opacity: 0; transform: translate(-50%, 20px); }
+          10% { opacity: 1; transform: translate(-50%, 0); }
+          80% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 0); }
+        }
+        
+        .animate-swipeGuide {
+          animation: swipeGuide 8s forwards;
+        }
+        
+        @keyframes handSwipe {
+          0% { transform: translateX(-15px); opacity: 0; }
+          20% { transform: translateX(-15px); opacity: 1; }
+          80% { transform: translateX(15px); opacity: 1; }
+          100% { transform: translateX(15px); opacity: 0; }
+        }
+        
+        .animate-handSwipe {
+          animation: handSwipe 2s infinite;
+        }
+        
+        .delay-100 {
+          animation-delay: 0.1s;
+        }
+        
+        .delay-200 {
+          animation-delay: 0.2s;
         }
       `}</style>
     </section>

@@ -244,8 +244,17 @@ const RedCarpetEvent = () => {
   return (
     <div className="bg-white text-gray-900  py-16">
       {/* Hero section with gradient and pattern overlay */}
-      <div className="relative bg-blue-900 py-10 md:py-24">
-        <div className="absolute inset-0 opacity-20">
+      <div className="relative py-16 md:py-20 lg:py-28 overflow-hidden">
+      <div className="absolute inset-0 z-0">
+          <img 
+            src="Hero2.png" 
+            alt="Portfolio header background" 
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-blue-900/80"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-blue-900/90"></div>
+        </div>
+        <div className="absolute inset-0 opacity-20 z-10">
           <svg
             width="100%"
             height="100%"

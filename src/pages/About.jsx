@@ -827,17 +827,7 @@ const AboutUs = () => {
         </div>
       </section>
       
-      {/* Back to top button - Only visible after scrolling down */}
-      {showBackToTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-4 right-4 z-50 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
-          aria-label="Back to top"
-        >
-          <ChevronUp size={24} />
-        </button>
-      )}
-      
+  
       {/* Utility styles */}
       <style jsx>{`
         .hide-scrollbar {
@@ -865,26 +855,6 @@ const AboutUs = () => {
         }
       `}</style>
     </div>
-  );
-};
-
-// Missing ChevronUp component import
-const ChevronUp = ({ size, className }) => {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
   );
 };
 
